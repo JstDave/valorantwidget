@@ -24,7 +24,7 @@ The widget is customizable and designed for use in streaming software like OBS.
 ---
 
 ### 2. **Set Up Your API Key, Username, and Tag**  
-1. Open the `index.html` file in any text editor (e.g., Notepad, VSCode).  
+1. Open the `Overlay.html` file in any text editor (e.g., Notepad, VSCode).  
 2. Locate the following section in the `<script>` tag:  
 
     ```javascript
@@ -53,7 +53,7 @@ The widget is customizable and designed for use in streaming software like OBS.
 2. Replace the URL with the link to your preferred background image.  
    - For example: `background-image: url('your-image-url-here');`  
 
-   Alternatively, you can use a local image by placing it in the same folder as `index.html` and changing the URL to the file name.  
+   Alternatively, you can use a local image by placing it in the same folder as `Overlay.html` and changing the URL to the file name.  
    - Example: `background-image: url('background.jpg');`  
 
 ---
@@ -63,7 +63,7 @@ The widget is customizable and designed for use in streaming software like OBS.
 2. Add a new **Browser Source**.  
 3. Set the following:
    - **Local File:** Check the checkbox **"Local File"**.
-   - **Browse:** Click the **Browse** button and select your `index.html` file.  
+   - **Browse:** Click the **Browse** button and select your `Overlay.html` file.  
    - **Width:** 1100px  
    - **Height:** 400px  
 5. Adjust the size and position of the widget in your OBS scene as needed.
