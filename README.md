@@ -74,5 +74,9 @@ The widget is customizable and designed for use in streaming software like OBS.
 
 - The widget updates automatically every 2 minutes.  
 - Ensure your API key and username/tag are correct to avoid errors.  
-- If you encounter issues, check the browser console for error messages.  
+- If you encounter issues, check the browser console for error messages. You can contact me on any social media ([My Socials](https://jstdave.com/socials))
 
+---
+
+## Example Picture
+![Example](https://i.imgur.com/kkdllJW.png)
