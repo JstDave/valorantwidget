@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valorant Rank Display</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #333;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .rank-box {
+            background-image: url('https://i.imgur.com/VW2vLbY.png');
+            background-size: cover;
+            background-position: center;
+            border-radius: 25px;
+            padding: 20px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            width: 1100px;
+            height: 400px;
+        }
+
+        .rank-box img {
+            max-width: 200px;
+            max-height: 200px;
+            height: auto;
+            filter: drop-shadow(15px 15px 10px #000000);
+            transition: opacity 1s ease-in-out;
+            opacity: 1;
+            font-size: 0px;
+        }
+
+        .rank-box h1 {
+            font-size: 150px;
+            color: white;
+            margin-left: 20px;
+            filter: drop-shadow(15px 15px 10px #000000);
+            transition: color 0.5s ease-in-out;
+        }
+
+        .fade-out {
+            animation: fadeOut 1s forwards;
+        }
+
+        .fade-in {
+            animation: fadeIn 1s forwards;
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="rank-box">
+    <img id="rank-image" src="https://media.valorant-api.com/competitivetiers/564d8e28-c226-3180-6285-e48a390db8b1/0/largeicon.png" alt="Rank Image">
+    <h1 id="rank-rating">Loading..</h1>
+</div>
+
+<script>
+    let previousRankRating = null;
+    let previousRankTier = null;
+
+    const tierOrder = [
+        'Iron 1', 'Iron 2', 'Iron 3',
+        'Bronze 1', 'Bronze 2', 'Bronze 3',
+        'Silver 1', 'Silver 2', 'Silver 3',
+        'Gold 1', 'Gold 2', 'Gold 3',
+        'Platinum 1', 'Platinum 2', 'Platinum 3',
+        'Diamond 1', 'Diamond 2', 'Diamond 3',
+        'Ascendant 1', 'Ascendant 2', 'Ascendant 3',
+        'Immortal 1', 'Immortal 2', 'Immortal 3',
+        'Radiant'
+    ];
+
+    const API_KEY = "YOUR_API_KEY"; // Please add your API key here
+    const USERNAME = "JstDave"; // Please add your username here
+    const TAG = "JST"; // Please add your tag here
+
+    function easeInOutQuad(t) {
+        return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+    }
+
+    function animateRankChange(start, end, duration, onUpdate, onComplete) {
+        const startTime = performance.now();
+        const change = end - start;
+
+        function step(currentTime) {
+            const elapsedTime = currentTime - startTime;
+            const progress = Math.min(elapsedTime / duration, 1);
+            const easedProgress = easeInOutQuad(progress);
+            const currentValue = start + easedProgress * change;
+            onUpdate(Math.round(currentValue));
+
+            if (progress < 1) {
+                requestAnimationFrame(step);
+            } else if (onComplete) {
+                onComplete();
+            }
+        }
+
+        requestAnimationFrame(step);
+    }
+
+    function changeRankImage(newSrc) {
+        const rankImage = document.getElementById('rank-image');
+        rankImage.classList.add('fade-out');
+        const imgPreload = new Image();
+        imgPreload.src = newSrc;
+        imgPreload.onload = () => {
+            setTimeout(() => {
+                rankImage.src = newSrc;
+                rankImage.classList.remove('fade-out');
+                rankImage.classList.add('fade-in');
+                setTimeout(() => rankImage.classList.remove('fade-in'), 1000);
+            }, 1000);
+        };
+    }
+
+    function getTierIndex(tier) {
+        return tierOrder.indexOf(tier);
+    }
+
+    function hasRankChanged(newTier) {
+        return previousRankTier && getTierIndex(newTier) !== getTierIndex(previousRankTier);
+    }
+
+    async function checkRank() {
+        try {
+            const response = await fetch(`https://api.henrikdev.xyz/valorant/v2/mmr/eu/${USERNAME}/${TAG}?api_key=${API_KEY}`);
+            if (!response.ok) throw new Error(`API request failed with status ${response.status}`);
+            const data = await response.json();
+            const currentData = data.data.current_data;
+
+            const newRankTier = currentData.currenttierpatched;
+            const newRankRating = currentData.ranking_in_tier;
+            const newImageSrc = currentData.images.large;
+
+            if (previousRankTier === null || previousRankRating === null) {
+                document.getElementById('rank-rating').textContent = `${newRankRating} RR`;
+                document.getElementById('rank-image').src = newImageSrc;
+                previousRankRating = newRankRating;
+                previousRankTier = newRankTier;
+                return;
+            }
+
+            if (hasRankChanged(newRankTier)) {
+                const isRankDown = getTierIndex(newRankTier) < getTierIndex(previousRankTier);
+                const animationColor = isRankDown ? 'red' : 'green';
+                const startValue = isRankDown ? previousRankRating : 0;
+                const endValue = isRankDown ? 0 : 99;
+
+                changeRankImage(newImageSrc);
+                document.getElementById('rank-rating').style.color = animationColor;
+
+                animateRankChange(previousRankRating, startValue, 1000, value => {
+                    document.getElementById('rank-rating').textContent = `${value} RR`;
+                }, () => {
+                    animateRankChange(endValue, newRankRating, 1000, value => {
+                        document.getElementById('rank-rating').textContent = `${value} RR`;
+                    }, () => {
+                        document.getElementById('rank-rating').style.color = 'white';
+                    });
+                });
+            } else {
+                const animationColor = newRankRating > previousRankRating ? 'green' : 'red';
+                document.getElementById('rank-rating').style.color = animationColor;
+                animateRankChange(previousRankRating, newRankRating, 1000, value => {
+                    document.getElementById('rank-rating').textContent = `${value} RR`;
+                }, () => {
+                    document.getElementById('rank-rating').style.color = 'white';
+                });
+            }
+
+            previousRankRating = newRankRating;
+            previousRankTier = newRankTier;
+        } catch (error) {
+            console.error('Error fetching rank data:', error);
+        }
+    }
+
+    setInterval(checkRank, 2 * 60 * 1000);
+    checkRank();
+</script>
+
+</body>
+</html>
