@@ -35,7 +35,7 @@ The widget is customizable and designed for use in streaming software like OBS.
     ```
 
 3. Replace the placeholders with:  
-   - Your **API key** from [Henrik Dev API]([https://henrikdev.xyz/valorant](https://discord.gg/henrikdev-systems-704231681309278228)).
+   - Your **API key** from [Henrik Dev API](https://discord.gg/henrikdev-systems-704231681309278228).
    - Your **Valorant username** (in quotes) (For example "JstDave" for the name "JstDave#JST").  
    - Your **Valorant tag** (in quotes) (For example "JST" for the name "JstDave#JST").  
 
