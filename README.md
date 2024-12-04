@@ -29,15 +29,17 @@ The widget is customizable and designed for use in streaming software like OBS.
 
     ```javascript
     // Please add your information here
-    const API_KEY = "YOUR_API_KEY"; // Replace with your API key
+    const API_KEY = "YOUR_API_KEY";     // Replace with your API key
     const USERNAME = "YOUR_USERNAME";   // Replace with your Valorant username
     const TAG = "YOUR_TAG";             // Replace with your Valorant tag
+    const REGION = "YOUR_REGION";       // Please add your region here (eu, na, latam, br, ap, kr)
     ```
 
 3. Replace the placeholders with:  
    - Your **API key** from [Henrik Dev API](https://discord.gg/henrikdev-systems-704231681309278228).
    - Your **Valorant username** (in quotes) (For example "JstDave" for the name "JstDave#JST").  
-   - Your **Valorant tag** (in quotes) (For example "JST" for the name "JstDave#JST").  
+   - Your **Valorant tag** (in quotes) (For example "JST" for the name "JstDave#JST").
+   - Your **Region** (eu, na, latam, br, ap, kr)
 
 ---
 
