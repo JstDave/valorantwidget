@@ -80,5 +80,5 @@ The widget is customizable and designed for use in streaming software like OBS.
 
 ---
 
-## Example Picture
-![Example](https://i.imgur.com/kkdllJW.png)
+## Example Picture & Rankup Animation
+<img src="https://i.imgur.com/kkdllJW.png" width="480"> ![Example-Video](https://github.com/user-attachments/assets/a77ed1aa-f2f6-4eb6-b6ce-52e0f2be987f)
