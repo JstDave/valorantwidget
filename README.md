@@ -36,7 +36,7 @@ The widget is customizable and designed for use in streaming software like OBS.
     ```
 
 3. Replace the placeholders with:  
-   - Your **API key** from [Henrik Dev API](https://discord.gg/henrikdev-systems-704231681309278228).
+   - Your **API key** from [Henrik Dev API](https://discord.gg/xpNYP3u26p). (Text channel #get-a-key)
    - Your **Valorant username** (For example "JstDave" for the name "JstDave#JST").  
    - Your **Valorant tag** (For example "JST" for the name "JstDave#JST").
    - Your **Region** (eu, na, latam, br, ap, kr)
