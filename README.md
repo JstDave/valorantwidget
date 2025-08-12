@@ -8,7 +8,7 @@ The widget is customizable and designed for use in streaming software like OBS.
 
 ## Features  
 
-- Real-time updates of Valorant rank and rank rating.
+- Real-time updates of Valorant rank, rank rating & shield count.
 - Smooth animations for rank and rank rating changes.
 - Customizable background image, API key, username, and tag.
 - Easy integration into OBS as a local browser source.
@@ -33,6 +33,7 @@ The widget is customizable and designed for use in streaming software like OBS.
     const USERNAME = "YOUR_USERNAME";   // Replace with your Valorant username
     const TAG = "YOUR_TAG";             // Replace with your Valorant tag
     const REGION = "YOUR_REGION";       // Please add your region here (eu, na, latam, br, ap, kr)
+    const PLATFORM = "YOUR_PLATFORM";   // Please add your platform here (pc, console)
     ```
 
 3. Replace the placeholders with:  
@@ -40,6 +41,7 @@ The widget is customizable and designed for use in streaming software like OBS.
    - Your **Valorant username** (For example "JstDave" for the name "JstDave#JST").  
    - Your **Valorant tag** (For example "JST" for the name "JstDave#JST").
    - Your **Region** (eu, na, latam, br, ap, kr)
+   - Your **Platform** (pc, console)
 
 ---
 
