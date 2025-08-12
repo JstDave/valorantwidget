@@ -30,23 +30,70 @@
             width: 1100px;
             height: 400px;
         }
-
+        
         .rank-box img {
-            max-width: 200px;
-            max-height: 200px;
+            max-width: 500px;
             height: auto;
             filter: drop-shadow(15px 15px 10px #000000);
             transition: opacity 1s ease-in-out;
             opacity: 1;
-            font-size: 0px;
+        }
+
+        .right-content {
+            display: flex;
+            flex-direction: column;
+            align-items: left;
+            margin-left: 20px;
+            transition: margin-bottom 0.5s ease-in-out;
         }
 
         .rank-box h1 {
             font-size: 150px;
             color: white;
-            margin-left: 20px;
+            margin: 0;
             filter: drop-shadow(15px 15px 10px #000000);
             transition: color 0.5s ease-in-out;
+        }
+
+        .shield-container {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            margin-top: -20px;
+            margin-left: 0px;
+            opacity: 1;
+            transition: opacity 1s ease-in-out, height 0.5s ease-in-out;
+            height: auto;
+            overflow: shown;
+        }
+
+        .shield-hidden {
+            opacity: 0;
+            height: 0;
+            margin: 0;
+			overflow: hidden;
+        }
+
+        .rank-rating-expanded {
+            margin-bottom: 20px;
+        }
+
+        #shield-image {
+            max-width: 80px;
+            height: auto;
+            margin: 0;
+            filter: drop-shadow(10px 10px 8px #000000);
+			margin-right: 10px;
+        }
+
+        #shield-count {
+            color: white;
+            font-size: 80px;
+            font-weight: bold;
+            margin-left: 10px;
+            position: static;
+            transform: none;
+            filter: drop-shadow(10px 10px 8px #000000);
         }
 
         .fade-out {
@@ -77,10 +124,15 @@
     </style>
 </head>
 <body>
-
 <div class="rank-box">
-    <img id="rank-image" src="https://media.valorant-api.com/competitivetiers/564d8e28-c226-3180-6285-e48a390db8b1/0/largeicon.png" alt="Rank Image">
-    <h1 id="rank-rating">Loading..</h1>
+    <img id="rank-image" src="" alt="Rank Image">
+    <div class="right-content">
+        <h1 id="rank-rating">Loading...</h1>
+        <div class="shield-container shield-hidden">
+            <img id="shield-image" src="" alt="Rank Shield">
+            <span id="shield-count">- Shields</span>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -98,14 +150,57 @@
         'Immortal 1', 'Immortal 2', 'Immortal 3',
         'Radiant'
     ];
-
-    const API_KEY = "YOUR_API_KEY"; // Please add your API key here
+	
+	const API_KEY = "YOUR_API_KEY"; // Please add your API key here
     const USERNAME = "YOUR_USERNAME"; // Please add your username here (for example "JstDave" for the name "JstDave#JST")
     const TAG = "YOUR_TAG"; // Please add your tag here (for example "JST" for the name "JstDave#JST"
     const REGION = "YOUR_REGION"; // Please add your region here (eu, na, latam, br, ap, kr)
+	const PLATFORM = "YOUR_PLATFORM"; //Please add your platform here (pc, console)
 
     function easeInOutQuad(t) {
         return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+    }
+
+    function isFirstRankOfTier(rankName) {
+        return rankName.endsWith('1') || rankName === 'Radiant';
+    }
+
+    function updateShieldVisibility(rankTier, shieldCount, animate = true) {
+        const shieldContainer = document.querySelector('.shield-container');
+        const rightContent = document.querySelector('.right-content');
+        
+        if (isFirstRankOfTier(rankTier)) {
+            if (animate) {
+                rightContent.classList.add('rank-rating-expanded');
+                setTimeout(() => {
+                    shieldContainer.classList.remove('shield-hidden');
+                }, 500);
+            } else {
+                rightContent.classList.add('rank-rating-expanded');
+                shieldContainer.classList.remove('shield-hidden');
+            }
+            
+            const shieldText = shieldCount === 1 ? 'Shield' : 'Shields';
+			document.getElementById('shield-count').textContent = `${shieldCount} ${shieldText}`;
+
+			const shieldImageUrls = [
+				"https://i.imgur.com/cmzimwM.png", 
+				"https://i.imgur.com/MRUZa2i.png", 
+				"https://i.imgur.com/39PDFlA.png"  
+			];
+
+			document.getElementById('shield-image').src = shieldImageUrls[shieldCount] || shieldImageUrls[0];
+        } else {
+            if (animate) {
+                shieldContainer.classList.add('shield-hidden');
+                setTimeout(() => {
+                    rightContent.classList.remove('rank-rating-expanded');
+                }, 1000);
+            } else {
+                shieldContainer.classList.add('shield-hidden');
+                rightContent.classList.remove('rank-rating-expanded');
+            }
+        }
     }
 
     function animateRankChange(start, end, duration, onUpdate, onComplete) {
@@ -128,18 +223,22 @@
 
         requestAnimationFrame(step);
     }
-
     function changeRankImage(newSrc) {
         const rankImage = document.getElementById('rank-image');
         rankImage.classList.add('fade-out');
+
         const imgPreload = new Image();
         imgPreload.src = newSrc;
+
         imgPreload.onload = () => {
             setTimeout(() => {
                 rankImage.src = newSrc;
                 rankImage.classList.remove('fade-out');
                 rankImage.classList.add('fade-in');
-                setTimeout(() => rankImage.classList.remove('fade-in'), 1000);
+
+                setTimeout(() => {
+                    rankImage.classList.remove('fade-in');
+                }, 1000);
             }, 1000);
         };
     }
@@ -154,49 +253,69 @@
 
     async function checkRank() {
         try {
-            const response = await fetch(`https://api.henrikdev.xyz/valorant/v2/mmr/${REGION}/${USERNAME}/${TAG}?api_key=${API_KEY}`);
-            if (!response.ok) throw new Error(`API request failed with status ${response.status}`);
+            const response = await fetch(`https://api.henrikdev.xyz/valorant/v3/mmr/${REGION}/${PLATFORM}/${USERNAME}/${TAG}?api_key=${API_KEY}`);
+			const request_url = `https://api.henrikdev.xyz/valorant/v3/mmr/${REGION}/${PLATFORM}/${USERNAME}/${TAG}?api_key=${API_KEY}`;
+            if (!response.ok) {
+                throw new Error(`API request failed with status ${response.status}, tried with url ${request_url}`);
+            }
             const data = await response.json();
-            const currentData = data.data.current_data;
+            const currentData = data.data.current;
+            
+            const shieldCount = currentData.rank_protection_shields || 0;
+            const newRankTier = currentData.tier.name;
+            const newRankTierShort = currentData.tier.id;
+            const newRankRating = currentData.rr;
+            const newImageSrc = `https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/${newRankTierShort}/largeicon.png`;
 
-            const newRankTier = currentData.currenttierpatched;
-            const newRankRating = currentData.ranking_in_tier;
-            const newImageSrc = currentData.images.large;
+            updateShieldVisibility(newRankTier, shieldCount);
 
             if (previousRankTier === null || previousRankRating === null) {
                 document.getElementById('rank-rating').textContent = `${newRankRating} RR`;
                 document.getElementById('rank-image').src = newImageSrc;
                 previousRankRating = newRankRating;
                 previousRankTier = newRankTier;
+                updateShieldVisibility(newRankTier, shieldCount, false);
                 return;
             }
 
             if (hasRankChanged(newRankTier)) {
-                const isRankDown = getTierIndex(newRankTier) < getTierIndex(previousRankTier);
-                const animationColor = isRankDown ? 'red' : 'green';
-                const startValue = isRankDown ? previousRankRating : 0;
-                const endValue = isRankDown ? 0 : 99;
-
-                changeRankImage(newImageSrc);
-                document.getElementById('rank-rating').style.color = animationColor;
-
-                animateRankChange(previousRankRating, startValue, 1000, value => {
-                    document.getElementById('rank-rating').textContent = `${value} RR`;
-                }, () => {
-                    animateRankChange(endValue, newRankRating, 1000, value => {
+                if (getTierIndex(newRankTier) < getTierIndex(previousRankTier)) {
+                    changeRankImage(newImageSrc);
+                    document.getElementById('rank-rating').style.color = 'red';
+                    animateRankChange(previousRankRating, 0, 1000, (value) => {
                         document.getElementById('rank-rating').textContent = `${value} RR`;
                     }, () => {
-                        document.getElementById('rank-rating').style.color = 'white';
+                        animateRankChange(99, newRankRating, 1000, (value) => {
+                            document.getElementById('rank-rating').textContent = `${value} RR`;
+                        }, () => {
+                            document.getElementById('rank-rating').style.color = 'white';
+                        });
                     });
-                });
+                } else if (getTierIndex(newRankTier) > getTierIndex(previousRankTier)) {
+                    changeRankImage(newImageSrc);
+                    document.getElementById('rank-rating').style.color = 'green';
+                    animateRankChange(previousRankRating, 99, 1000, (value) => {
+                        document.getElementById('rank-rating').textContent = `${value} RR`;
+                    }, () => {
+                        animateRankChange(0, newRankRating, 1000, (value) => {
+                            document.getElementById('rank-rating').textContent = `${value} RR`;
+                        }, () => {
+                            document.getElementById('rank-rating').style.color = 'white';
+                        });
+                    });
+                }
             } else {
-                const animationColor = newRankRating > previousRankRating ? 'green' : 'red';
-                document.getElementById('rank-rating').style.color = animationColor;
-                animateRankChange(previousRankRating, newRankRating, 1000, value => {
+                if (newRankRating > previousRankRating) {
+                    document.getElementById('rank-rating').style.color = 'green';
+                } else if (newRankRating < previousRankRating) {
+                    document.getElementById('rank-rating').style.color = 'red';
+                }
+
+                animateRankChange(previousRankRating, newRankRating, 1000, (value) => {
                     document.getElementById('rank-rating').textContent = `${value} RR`;
                 }, () => {
                     document.getElementById('rank-rating').style.color = 'white';
-                });
+                                });
             }
 
             previousRankRating = newRankRating;
@@ -206,7 +325,7 @@
         }
     }
 
-    setInterval(checkRank, 2 * 60 * 1000);
+    setInterval(checkRank, 60000);
     checkRank();
 </script>
 
