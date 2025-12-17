@@ -1,44 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Valorant Rank Display</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
-
+        html, body {
+            height: 100%;
+        }
         body {
             margin: 0;
-            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #333;
+            background: transparent;
             font-family: 'Montserrat', sans-serif;
         }
-
+        .frame {
+            position: relative;
+            display: inline-block;
+            border-radius: 250px;
+            overflow: hidden;
+        	box-shadow: 0px 0px 30px 8px #000000;
+        	margin: 40px;
+        }
         .rank-box {
-            background-image: url('https://i.imgur.com/VW2vLbY.png');
+            position: relative;
+            background-image: url('https://i.imgur.com/7LtBNJ3.png');
             background-size: cover;
             background-position: center;
-            border-radius: 25px;
-            padding: 20px;
+            width: 1000px;
+            height: 350px;
             display: flex;
-            flex-direction: row;
             align-items: center;
             justify-content: center;
-            width: 1100px;
-            height: 400px;
+            padding: 20px;
         }
-        
         .rank-box img {
             max-width: 500px;
-            height: auto;
+            height: 270px;
             filter: drop-shadow(15px 15px 10px #000000);
             transition: opacity 1s ease-in-out;
             opacity: 1;
+        	margin-left: -20px;
         }
-
         .right-content {
             display: flex;
             flex-direction: column;
@@ -46,7 +53,6 @@
             margin-left: 20px;
             transition: margin-bottom 0.5s ease-in-out;
         }
-
         .rank-box h1 {
             font-size: 150px;
             color: white;
@@ -54,7 +60,6 @@
             filter: drop-shadow(15px 15px 10px #000000);
             transition: color 0.5s ease-in-out;
         }
-
         .shield-container {
             display: flex;
             flex-direction: row;
@@ -66,26 +71,22 @@
             height: auto;
             overflow: shown;
         }
-
         .shield-hidden {
             opacity: 0;
             height: 0;
             margin: 0;
-			overflow: hidden;
+            overflow: hidden;
         }
-
         .rank-rating-expanded {
             margin-bottom: 20px;
         }
-
         #shield-image {
             max-width: 80px;
             height: auto;
             margin: 0;
             filter: drop-shadow(10px 10px 8px #000000);
-			margin-right: 10px;
+            margin-right: 10px;
         }
-
         #shield-count {
             color: white;
             font-size: 80px;
@@ -95,240 +96,297 @@
             transform: none;
             filter: drop-shadow(10px 10px 8px #000000);
         }
-
         .fade-out {
             animation: fadeOut 1s forwards;
         }
-
         .fade-in {
             animation: fadeIn 1s forwards;
         }
-
         @keyframes fadeOut {
-            from {
-                opacity: 1;
-            }
-            to {
-                opacity: 0;
-            }
+            from { opacity: 1; }
+            to { opacity: 0; }
         }
-
         @keyframes fadeIn {
-            from {
-                opacity: 0;
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @media (max-width: 1200px) {
+            .rank-box {
+                width: 92vw;
+                height: auto;
+                min-height: 280px;
             }
-            to {
-                opacity: 1;
+            .rank-box h1 {
+                font-size: 12vw;
+            }
+            #shield-count {
+                font-size: 6.5vw;
+            }
+            .rank-box img {
+                max-width: 40vw;
             }
         }
     </style>
 </head>
+
 <body>
-<div class="rank-box">
-    <img id="rank-image" src="" alt="Rank Image">
-    <div class="right-content">
-        <h1 id="rank-rating">Loading...</h1>
-        <div class="shield-container shield-hidden">
-            <img id="shield-image" src="" alt="Rank Shield">
-            <span id="shield-count">- Shields</span>
+    <div class="frame">
+        <div class="rank-box">
+            <img id="rank-image" src="" alt="">
+            <div class="right-content">
+                <h1 id="rank-rating">Loading...</h1>
+                <div class="shield-container shield-hidden">
+                    <img id="shield-image" src="images/rankshield2.png" alt="Rank Shield">
+                    <span id="shield-count">- Shields</span>
+                </div>
+            </div>
         </div>
     </div>
-</div>
-
-<script>
-    let previousRankRating = null;
-    let previousRankTier = null;
-
-    const tierOrder = [
-        'Iron 1', 'Iron 2', 'Iron 3',
-        'Bronze 1', 'Bronze 2', 'Bronze 3',
-        'Silver 1', 'Silver 2', 'Silver 3',
-        'Gold 1', 'Gold 2', 'Gold 3',
-        'Platinum 1', 'Platinum 2', 'Platinum 3',
-        'Diamond 1', 'Diamond 2', 'Diamond 3',
-        'Ascendant 1', 'Ascendant 2', 'Ascendant 3',
-        'Immortal 1', 'Immortal 2', 'Immortal 3',
-        'Radiant'
-    ];
-
-	// Please add your information here
-	const API_KEY = "YOUR_API_KEY"; 	// Please add your API key here
-    const USERNAME = "YOUR_USERNAME"; 	// Please add your username here (for example "JstDave" for the name "JstDave#JST")
-    const TAG = "YOUR_TAG"; 			// Please add your tag here (for example "JST" for the name "JstDave#JST"
-    const REGION = "YOUR_REGION"; 		// Please add your region here (eu, na, latam, br, ap, kr)
-	const PLATFORM = "YOUR_PLATFORM"; 	// Please add your platform here (pc, console)
-
-    function easeInOutQuad(t) {
-        return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
-    }
-
-    function isFirstRankOfTier(rankName) {
-        return rankName.endsWith('1') || rankName === 'Radiant';
-    }
-
-    function updateShieldVisibility(rankTier, shieldCount, animate = true) {
-        const shieldContainer = document.querySelector('.shield-container');
-        const rightContent = document.querySelector('.right-content');
+    <script>
+			
+			
+			// Please add your information here
+        	const API_KEY 	= 	"YOUR_API_KEY"; 	// Please add your API key here
+            const USERNAME 	= 	"YOUR_USERNAME"; 	// Please add your username here (for example "JstDave" for the name "JstDave#JST")
+            const TAG 		= 	"YOUR_TAG"; 		// Please add your tag here (for example "JST" for the name "JstDave#JST"
+            const REGION 	= 	"YOUR_REGION"; 		// Please add your region here (eu, na, latam, br, ap, kr)
+        	const PLATFORM 	= 	"YOUR_PLATFORM"; 	// Please add your platform here (pc, console)
         
-        if (isFirstRankOfTier(rankTier)) {
-            if (animate) {
-                rightContent.classList.add('rank-rating-expanded');
-                setTimeout(() => {
+        
+        let previousRankRating = null;
+        let previousRankTier = null;
+        let previousLeaderboardRank = null;
+        let previousHadLeaderboard = null;
+        
+        const tierOrder = [
+            'Iron 1', 'Iron 2', 'Iron 3',
+            'Bronze 1', 'Bronze 2', 'Bronze 3',
+            'Silver 1', 'Silver 2', 'Silver 3',
+            'Gold 1', 'Gold 2', 'Gold 3',
+            'Platinum 1', 'Platinum 2', 'Platinum 3',
+            'Diamond 1', 'Diamond 2', 'Diamond 3',
+            'Ascendant 1', 'Ascendant 2', 'Ascendant 3',
+            'Immortal 1', 'Immortal 2', 'Immortal 3',
+            'Radiant'
+        ];
+        
+        const shieldImageUrls = [
+            "https://i.imgur.com/cmzimwM.png",
+            "https://i.imgur.com/MRUZa2i.png",
+            "https://i.imgur.com/39PDFlA.png"
+        ];
+        
+        function easeInOutQuad(t) {
+            return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+        }
+        
+        function isFirstRankOfTier(rankName) {
+            return rankName.endsWith('1') || rankName === 'Radiant';
+        }
+        
+        function updateShieldVisibility(rankTier, shieldCount, animate = true) {
+            const shieldContainer = document.querySelector('.shield-container');
+            const rightContent = document.querySelector('.right-content');
+            if (isFirstRankOfTier(rankTier)) {
+                if (animate) {
+                    rightContent.classList.add('rank-rating-expanded');
+                    setTimeout(() => {
+                        shieldContainer.classList.remove('shield-hidden');
+                    }, 500);
+                } else {
+                    rightContent.classList.add('rank-rating-expanded');
                     shieldContainer.classList.remove('shield-hidden');
-                }, 500);
+                }
+                const shieldText = shieldCount === 1 ? 'Shield' : 'Shields';
+                document.getElementById('shield-count').textContent = `${shieldCount} ${shieldText}`;
+                document.getElementById('shield-image').src = shieldImageUrls[shieldCount] || shieldImageUrls[0];
             } else {
-                rightContent.classList.add('rank-rating-expanded');
-                shieldContainer.classList.remove('shield-hidden');
-            }
-            
-            const shieldText = shieldCount === 1 ? 'Shield' : 'Shields';
-			document.getElementById('shield-count').textContent = `${shieldCount} ${shieldText}`;
-
-			const shieldImageUrls = [
-				"https://i.imgur.com/cmzimwM.png", 
-				"https://i.imgur.com/MRUZa2i.png", 
-				"https://i.imgur.com/39PDFlA.png"  
-			];
-
-			document.getElementById('shield-image').src = shieldImageUrls[shieldCount] || shieldImageUrls[0];
-        } else {
-            if (animate) {
-                shieldContainer.classList.add('shield-hidden');
-                setTimeout(() => {
+                if (animate) {
+                    shieldContainer.classList.add('shield-hidden');
+                    setTimeout(() => {
+                        rightContent.classList.remove('rank-rating-expanded');
+                    }, 1000);
+                } else {
+                    shieldContainer.classList.add('shield-hidden');
                     rightContent.classList.remove('rank-rating-expanded');
-                }, 1000);
-            } else {
-                shieldContainer.classList.add('shield-hidden');
-                rightContent.classList.remove('rank-rating-expanded');
+                }
             }
         }
-    }
-
-    function animateRankChange(start, end, duration, onUpdate, onComplete) {
-        const startTime = performance.now();
-        const change = end - start;
-
-        function step(currentTime) {
-            const elapsedTime = currentTime - startTime;
-            const progress = Math.min(elapsedTime / duration, 1);
-            const easedProgress = easeInOutQuad(progress);
-            const currentValue = start + easedProgress * change;
-            onUpdate(Math.round(currentValue));
-
-            if (progress < 1) {
-                requestAnimationFrame(step);
-            } else if (onComplete) {
-                onComplete();
+        
+        function animateNumber(start, end, duration, onUpdate, onComplete) {
+            const startTime = performance.now();
+            const change = end - start;
+            function step(currentTime) {
+                const elapsedTime = currentTime - startTime;
+                const progress = Math.min(elapsedTime / duration, 1);
+                const easedProgress = easeInOutQuad(progress);
+                const currentValue = start + easedProgress * change;
+                onUpdate(Math.round(currentValue));
+                if (progress < 1) {
+                    requestAnimationFrame(step);
+                } else if (onComplete) {
+                    onComplete();
+                }
             }
+            requestAnimationFrame(step);
         }
-
-        requestAnimationFrame(step);
-    }
-    function changeRankImage(newSrc) {
-        const rankImage = document.getElementById('rank-image');
-        rankImage.classList.add('fade-out');
-
-        const imgPreload = new Image();
-        imgPreload.src = newSrc;
-
-        imgPreload.onload = () => {
-            setTimeout(() => {
-                rankImage.src = newSrc;
-                rankImage.classList.remove('fade-out');
-                rankImage.classList.add('fade-in');
-
+        
+        function animateRankChange(start, end, duration, onUpdate, onComplete) {
+            animateNumber(start, end, duration, onUpdate, onComplete);
+        }
+        
+        function animateLeaderboardChange(start, end, duration, onUpdate, onComplete) {
+            animateNumber(start, end, duration, onUpdate, onComplete);
+        }
+        
+        function changeRankImage(newSrc) {
+            const rankImage = document.getElementById('rank-image');
+            rankImage.classList.add('fade-out');
+            const imgPreload = new Image();
+            imgPreload.src = newSrc;
+            imgPreload.onload = () => {
                 setTimeout(() => {
-                    rankImage.classList.remove('fade-in');
+                    rankImage.src = newSrc;
+                    rankImage.classList.remove('fade-out');
+                    rankImage.classList.add('fade-in');
+                    setTimeout(() => {
+                        rankImage.classList.remove('fade-in');
+                    }, 1000);
                 }, 1000);
-            }, 1000);
-        };
-    }
-
-    function getTierIndex(tier) {
-        return tierOrder.indexOf(tier);
-    }
-
-    function hasRankChanged(newTier) {
-        return previousRankTier && getTierIndex(newTier) !== getTierIndex(previousRankTier);
-    }
-
-    async function checkRank() {
-        try {
-            const response = await fetch(`https://api.henrikdev.xyz/valorant/v3/mmr/${REGION}/${PLATFORM}/${USERNAME}/${TAG}?api_key=${API_KEY}`);
-			const request_url = `https://api.henrikdev.xyz/valorant/v3/mmr/${REGION}/${PLATFORM}/${USERNAME}/${TAG}?api_key=${API_KEY}`;
-            if (!response.ok) {
-                throw new Error(`API request failed with status ${response.status}, tried with url ${request_url}`);
-            }
-            const data = await response.json();
-            const currentData = data.data.current;
-            
-            const shieldCount = currentData.rank_protection_shields || 0;
-            const newRankTier = currentData.tier.name;
-            const newRankTierShort = currentData.tier.id;
-            const newRankRating = currentData.rr;
-            const newImageSrc = `https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/${newRankTierShort}/largeicon.png`;
-
-            updateShieldVisibility(newRankTier, shieldCount);
-
-            if (previousRankTier === null || previousRankRating === null) {
-                document.getElementById('rank-rating').textContent = `${newRankRating} RR`;
-                document.getElementById('rank-image').src = newImageSrc;
+            };
+        }
+        
+        function getTierIndex(tier) {
+            return tierOrder.indexOf(tier);
+        }
+        
+        function hasRankChanged(newTier) {
+            return previousRankTier && getTierIndex(newTier) !== getTierIndex(previousRankTier);
+        }
+        
+        function showLeaderboardBadge(rankNumber, shieldCount) {
+            const shieldContainer = document.querySelector('.shield-container');
+            const rightContent = document.querySelector('.right-content');
+            const shieldImg = document.getElementById('shield-image');
+            const shieldText = document.getElementById('shield-count');
+            rightContent.classList.add('rank-rating-expanded');
+            shieldContainer.classList.remove('shield-hidden');
+            shieldImg.src = shieldImageUrls[shieldCount] || shieldImageUrls[0];
+            shieldText.textContent = `#${rankNumber}`;
+        }
+        
+        function showShieldsOrHide(rankTier, shieldCount) {
+            updateShieldVisibility(rankTier, shieldCount);
+        }
+        
+        async function checkRank() {
+            try {
+                const response = await fetch(`https://api.henrikdev.xyz/valorant/v3/mmr/${REGION}/${PLATFORM}/${USERNAME}/${TAG}?api_key=${API_KEY}`);
+                if (!response.ok) {
+                    throw new Error(`API request failed with status ${response.status}`);
+                }
+                const data = await response.json();
+                const currentData = data.data.current;
+                const shieldCount = currentData.rank_protection_shields || 0;
+                const newRankTier = currentData.tier.name;
+                const newRankTierShort = currentData.tier.id;
+                const newRankRating = currentData.rr;
+                const leaderboardPlacement = currentData.leaderboard_placement;
+                const hasLeaderboard = leaderboardPlacement && typeof leaderboardPlacement.rank === 'number';
+                const newLeaderboardRank = hasLeaderboard ? leaderboardPlacement.rank : null;
+                const newImageSrc = `https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/${newRankTierShort}/largeicon.png`;
+        
+                const rankRatingEl = document.getElementById('rank-rating');
+                const shieldTextEl = document.getElementById('shield-count');
+        
+                if (previousRankTier === null || previousRankRating === null || previousHadLeaderboard === null) {
+                    document.getElementById('rank-rating').textContent = `${newRankRating} RR`;
+                    document.getElementById('rank-image').src = newImageSrc;
+                    if (hasLeaderboard) {
+                        showLeaderboardBadge(newLeaderboardRank, shieldCount);
+                    } else {
+                        updateShieldVisibility(newRankTier, shieldCount, false);
+                    }
+                    previousRankRating = newRankRating;
+                    previousRankTier = newRankTier;
+                    previousLeaderboardRank = newLeaderboardRank;
+                    previousHadLeaderboard = !!hasLeaderboard;
+                    return;
+                }
+        
+                if (hasRankChanged(newRankTier)) {
+                    changeRankImage(newImageSrc);
+                    if (getTierIndex(newRankTier) < getTierIndex(previousRankTier)) {
+                        rankRatingEl.style.color = 'red';
+                        animateRankChange(previousRankRating, 0, 1000, (value) => {
+                            rankRatingEl.textContent = `${value} RR`;
+                        }, () => {
+                            animateRankChange(99, newRankRating, 1000, (value) => {
+                                rankRatingEl.textContent = `${value} RR`;
+                            }, () => {
+                                rankRatingEl.style.color = 'white';
+                            });
+                        });
+                    } else if (getTierIndex(newRankTier) > getTierIndex(previousRankTier)) {
+                        rankRatingEl.style.color = 'green';
+                        animateRankChange(previousRankRating, 99, 1000, (value) => {
+                            rankRatingEl.textContent = `${value} RR`;
+                        }, () => {
+                            animateRankChange(0, newRankRating, 1000, (value) => {
+                                rankRatingEl.textContent = `${value} RR`;
+                            }, () => {
+                                rankRatingEl.style.color = 'white';
+                            });
+                        });
+                    }
+                } else {
+                    if (newRankRating > previousRankRating) {
+                        rankRatingEl.style.color = 'green';
+                    } else if (newRankRating < previousRankRating) {
+                        rankRatingEl.style.color = 'red';
+                    }
+                    animateRankChange(previousRankRating, newRankRating, 1000, (value) => {
+                        rankRatingEl.textContent = `${value} RR`;
+                    }, () => {
+                        rankRatingEl.style.color = 'white';
+                    });
+                }
+        
+                if (hasLeaderboard) {
+                    const goingUpInLeaderboard = previousLeaderboardRank !== null && newLeaderboardRank < previousLeaderboardRank;
+                    const goingDownInLeaderboard = previousLeaderboardRank !== null && newLeaderboardRank > previousLeaderboardRank;
+                    if (goingUpInLeaderboard) {
+                        shieldTextEl.style.color = 'green';
+                    } else if (goingDownInLeaderboard) {
+                        shieldTextEl.style.color = 'red';
+                    }
+                    if (!previousHadLeaderboard) {
+                        showLeaderboardBadge(newLeaderboardRank, shieldCount);
+                        shieldTextEl.style.color = 'white';
+                    } else {
+                        showLeaderboardBadge(previousLeaderboardRank ?? newLeaderboardRank, shieldCount);
+                        animateLeaderboardChange(previousLeaderboardRank ?? newLeaderboardRank, newLeaderboardRank, 1000, (value) => {
+                            shieldTextEl.textContent = `#${value}`;
+                        }, () => {
+                            shieldTextEl.style.color = 'white';
+                        });
+                    }
+                } else {
+                    showShieldsOrHide(newRankTier, shieldCount);
+                }
+        
                 previousRankRating = newRankRating;
                 previousRankTier = newRankTier;
-                updateShieldVisibility(newRankTier, shieldCount, false);
-                return;
+                previousHadLeaderboard = !!hasLeaderboard;
+                previousLeaderboardRank = newLeaderboardRank;
+            } catch (error) {
+                console.error('Error fetching rank data:', error);
             }
-
-            if (hasRankChanged(newRankTier)) {
-                if (getTierIndex(newRankTier) < getTierIndex(previousRankTier)) {
-                    changeRankImage(newImageSrc);
-                    document.getElementById('rank-rating').style.color = 'red';
-                    animateRankChange(previousRankRating, 0, 1000, (value) => {
-                        document.getElementById('rank-rating').textContent = `${value} RR`;
-                    }, () => {
-                        animateRankChange(99, newRankRating, 1000, (value) => {
-                            document.getElementById('rank-rating').textContent = `${value} RR`;
-                        }, () => {
-                            document.getElementById('rank-rating').style.color = 'white';
-                        });
-                    });
-                } else if (getTierIndex(newRankTier) > getTierIndex(previousRankTier)) {
-                    changeRankImage(newImageSrc);
-                    document.getElementById('rank-rating').style.color = 'green';
-                    animateRankChange(previousRankRating, 99, 1000, (value) => {
-                        document.getElementById('rank-rating').textContent = `${value} RR`;
-                    }, () => {
-                        animateRankChange(0, newRankRating, 1000, (value) => {
-                            document.getElementById('rank-rating').textContent = `${value} RR`;
-                        }, () => {
-                            document.getElementById('rank-rating').style.color = 'white';
-                        });
-                    });
-                }
-            } else {
-                if (newRankRating > previousRankRating) {
-                    document.getElementById('rank-rating').style.color = 'green';
-                } else if (newRankRating < previousRankRating) {
-                    document.getElementById('rank-rating').style.color = 'red';
-                }
-
-                animateRankChange(previousRankRating, newRankRating, 1000, (value) => {
-                    document.getElementById('rank-rating').textContent = `${value} RR`;
-                }, () => {
-                    document.getElementById('rank-rating').style.color = 'white';
-                                });
-            }
-
-            previousRankRating = newRankRating;
-            previousRankTier = newRankTier;
-        } catch (error) {
-            console.error('Error fetching rank data:', error);
         }
-    }
-
-    setInterval(checkRank, 60000);
-    checkRank();
-</script>
-
+        
+        setInterval(checkRank, 60000);
+        checkRank();
+    </script>
 </body>
+
 </html>
