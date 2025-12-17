@@ -8,9 +8,9 @@ The widget is customizable and designed for use in streaming software like OBS.
 
 ## Features  
 
-- Real-time updates of Valorant rank, rank rating & shield count.
-- Smooth animations for rank and rank rating changes.
-- Customizable background image, API key, username, and tag.
+- Real-time updates of Valorant rank, rank rating, shield count & leaderboard placement.
+- Smooth animations for rank, rank rating & leaderboard placement changes.
+- Customizable background image, username, tag, region & platform.
 - Easy integration into OBS as a local browser source.
 
 ---
@@ -29,10 +29,10 @@ The widget is customizable and designed for use in streaming software like OBS.
 
     ```javascript
     // Please add your information here
-    const API_KEY = "YOUR_API_KEY";     // Replace with your API key
+    const API_KEY  = "YOUR_API_KEY";    // Replace with your API key
     const USERNAME = "YOUR_USERNAME";   // Replace with your Valorant username
-    const TAG = "YOUR_TAG";             // Replace with your Valorant tag
-    const REGION = "YOUR_REGION";       // Please add your region here (eu, na, latam, br, ap, kr)
+    const TAG      = "YOUR_TAG";        // Replace with your Valorant tag
+    const REGION   = "YOUR_REGION";     // Please add your region here (eu, na, latam, br, ap, kr)
     const PLATFORM = "YOUR_PLATFORM";   // Please add your platform here (pc, console)
     ```
 
@@ -82,5 +82,8 @@ The widget is customizable and designed for use in streaming software like OBS.
 
 ---
 
-## Example Picture & Rankup Animation
-<img src="https://i.imgur.com/kkdllJW.png" width="480"> ![Example-Video](https://github.com/user-attachments/assets/a77ed1aa-f2f6-4eb6-b6ce-52e0f2be987f)
+## Example Pictures & Rankup Animation
+<img src="https://i.imgur.com/n0BbsI2.png" height="300"> <img src="https://i.imgur.com/rxL5SU5.png" height="300"> ![Example-Video](https://github.com/user-attachments/assets/a77ed1aa-f2f6-4eb6-b6ce-52e0f2be987f)
+
+## Example Picture of an account with a leaderboard placement (Top 15000)
+<img src="https://i.imgur.com/uLpKBYg.png" height="300">
