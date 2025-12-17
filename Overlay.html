@@ -23,8 +23,8 @@
             display: inline-block;
             border-radius: 250px;
             overflow: hidden;
-        	box-shadow: 0px 0px 30px 8px #000000;
-        	margin: 40px;
+            box-shadow: 0px 0px 30px 8px #000000;
+            margin: 40px;
         }
         .rank-box {
             position: relative;
@@ -44,14 +44,14 @@
             filter: drop-shadow(15px 15px 10px #000000);
             transition: opacity 1s ease-in-out;
             opacity: 1;
-        	margin-left: -20px;
+            margin-left: -20px;
         }
         .right-content {
             display: flex;
             flex-direction: column;
             align-items: left;
             margin-left: 20px;
-            transition: margin-bottom 0.5s ease-in-out;
+            transition: margin-bottom 0.5s ease-in-out, align-items 0.4s ease-in-out;
         }
         .rank-box h1 {
             font-size: 150px;
@@ -67,7 +67,7 @@
             margin-top: -20px;
             margin-left: 0px;
             opacity: 1;
-            transition: opacity 1s ease-in-out, height 0.5s ease-in-out;
+            transition: opacity 400ms ease, height 400ms ease, margin-top 400ms ease;
             height: auto;
             overflow: shown;
         }
@@ -86,6 +86,7 @@
             margin: 0;
             filter: drop-shadow(10px 10px 8px #000000);
             margin-right: 10px;
+            transition: opacity 400ms ease;
         }
         #shield-count {
             color: white;
@@ -95,6 +96,7 @@
             position: static;
             transform: none;
             filter: drop-shadow(10px 10px 8px #000000);
+            transition: color 0.5s ease-in-out;
         }
         .fade-out {
             animation: fadeOut 1s forwards;
@@ -109,6 +111,14 @@
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
+        }
+        .shield-fade-out {
+            opacity: 0 !important;
+            height: 0 !important;
+            margin-top: 0 !important;
+        }
+        .center-rr {
+            align-items: center !important;
         }
         @media (max-width: 1200px) {
             .rank-box {
@@ -136,21 +146,21 @@
             <div class="right-content">
                 <h1 id="rank-rating">Loading...</h1>
                 <div class="shield-container shield-hidden">
-                    <img id="shield-image" src="images/rankshield2.png" alt="Rank Shield">
+                    <img id="shield-image" src="" alt="">
                     <span id="shield-count">- Shields</span>
                 </div>
             </div>
         </div>
     </div>
     <script>
-			
-			
-			// Please add your information here
-        	const API_KEY 	= 	"YOUR_API_KEY"; 	// Please add your API key here
-            const USERNAME 	= 	"YOUR_USERNAME"; 	// Please add your username here (for example "JstDave" for the name "JstDave#JST")
-            const TAG 		= 	"YOUR_TAG"; 		// Please add your tag here (for example "JST" for the name "JstDave#JST"
-            const REGION 	= 	"YOUR_REGION"; 		// Please add your region here (eu, na, latam, br, ap, kr)
-        	const PLATFORM 	= 	"YOUR_PLATFORM"; 	// Please add your platform here (pc, console)
+        
+		
+		// Please add your information here
+        const API_KEY 	= "YOUR_API_KEY";     // Please add your API key here
+        const USERNAME 	= "YOUR_USERNAME";    // Please add your username here (for example "JstDave" for the name "JstDave#JST")
+        const TAG 		= "YOUR_TAG";         // Please add your tag here (for example "JST" for the name "JstDave#JST"
+        const REGION 	= "YOUR_REGION";      // Please add your region here (eu, na, latam, br, ap, kr)
+        const PLATFORM 	= "YOUR_PLATFORM";    // Please add your platform here (pc, console)
         
         
         let previousRankRating = null;
@@ -181,34 +191,46 @@
         }
         
         function isFirstRankOfTier(rankName) {
-            return rankName.endsWith('1') || rankName === 'Radiant';
+            if (rankName === 'Radiant') return false;
+            if (rankName.startsWith('Immortal') && !rankName.endsWith(' 1')) return false;
+            return rankName.endsWith(' 1');
         }
         
         function updateShieldVisibility(rankTier, shieldCount, animate = true) {
             const shieldContainer = document.querySelector('.shield-container');
             const rightContent = document.querySelector('.right-content');
-            if (isFirstRankOfTier(rankTier)) {
+            const shieldImg = document.getElementById('shield-image');
+            const shieldText = document.getElementById('shield-count');
+            
+            const shouldShow = isFirstRankOfTier(rankTier);
+            
+            if (shouldShow) {
+                rightContent.classList.add('rank-rating-expanded');
+                rightContent.classList.remove('center-rr');
+                shieldContainer.classList.remove('shield-fade-out');
                 if (animate) {
-                    rightContent.classList.add('rank-rating-expanded');
-                    setTimeout(() => {
-                        shieldContainer.classList.remove('shield-hidden');
-                    }, 500);
+                    setTimeout(() => shieldContainer.classList.remove('shield-hidden'), 10);
                 } else {
-                    rightContent.classList.add('rank-rating-expanded');
                     shieldContainer.classList.remove('shield-hidden');
                 }
-                const shieldText = shieldCount === 1 ? 'Shield' : 'Shields';
-                document.getElementById('shield-count').textContent = `${shieldCount} ${shieldText}`;
-                document.getElementById('shield-image').src = shieldImageUrls[shieldCount] || shieldImageUrls[0];
+                const text = shieldCount === 1 ? 'Shield' : 'Shields';
+                shieldText.textContent = `${shieldCount} ${text}`;
+                shieldImg.src = shieldImageUrls[shieldCount] || shieldImageUrls[0];
+                shieldImg.style.display = '';
+                shieldImg.style.opacity = '1';
             } else {
                 if (animate) {
-                    shieldContainer.classList.add('shield-hidden');
+                    shieldContainer.classList.add('shield-fade-out');
                     setTimeout(() => {
+                        shieldContainer.classList.add('shield-hidden');
                         rightContent.classList.remove('rank-rating-expanded');
-                    }, 1000);
+                        rightContent.classList.add('center-rr');
+                    }, 400);
                 } else {
                     shieldContainer.classList.add('shield-hidden');
+                    shieldContainer.classList.remove('shield-fade-out');
                     rightContent.classList.remove('rank-rating-expanded');
+                    rightContent.classList.add('center-rr');
                 }
             }
         }
@@ -264,6 +286,28 @@
             return previousRankTier && getTierIndex(newTier) !== getTierIndex(previousRankTier);
         }
         
+        function animateShieldOutForRankUp(hasLeaderboard) {
+            const shieldContainer = document.querySelector('.shield-container');
+            const rightContent = document.querySelector('.right-content');
+            const shieldImg = document.getElementById('shield-image');
+            
+            rightContent.classList.add('center-rr');
+            
+            if (hasLeaderboard) {
+                shieldImg.style.opacity = '0';
+                setTimeout(() => {
+                    shieldImg.style.display = 'none';
+                    shieldImg.style.opacity = '';
+                }, 400);
+            } else {
+                shieldContainer.classList.add('shield-fade-out');
+                setTimeout(() => {
+                    shieldContainer.classList.add('shield-hidden');
+                    rightContent.classList.remove('rank-rating-expanded');
+                }, 400);
+            }
+        }
+        
         function showLeaderboardBadge(rankNumber, shieldCount) {
             const shieldContainer = document.querySelector('.shield-container');
             const rightContent = document.querySelector('.right-content');
@@ -271,7 +315,20 @@
             const shieldText = document.getElementById('shield-count');
             rightContent.classList.add('rank-rating-expanded');
             shieldContainer.classList.remove('shield-hidden');
-            shieldImg.src = shieldImageUrls[shieldCount] || shieldImageUrls[0];
+            shieldContainer.classList.remove('shield-fade-out');
+        
+            const rankRatingEl = document.getElementById('rank-rating');
+            const currentRankTier = rankRatingEl?.dataset?.tierName || '';
+            const hideShieldIcon = currentRankTier === 'Radiant' || currentRankTier === 'Immortal 2' || currentRankTier === 'Immortal 3';
+        
+            if (hideShieldIcon) {
+                shieldImg.style.display = 'none';
+            } else {
+                shieldImg.style.display = '';
+                shieldImg.style.opacity = '1';
+                shieldImg.src = shieldImageUrls[shieldCount] || shieldImageUrls[0];
+            }
+        
             shieldText.textContent = `#${rankNumber}`;
         }
         
@@ -299,8 +356,11 @@
                 const rankRatingEl = document.getElementById('rank-rating');
                 const shieldTextEl = document.getElementById('shield-count');
         
+                rankRatingEl.dataset.tierName = newRankTier;
+        
                 if (previousRankTier === null || previousRankRating === null || previousHadLeaderboard === null) {
                     document.getElementById('rank-rating').textContent = `${newRankRating} RR`;
+                    document.getElementById('rank-rating').dataset.tierName = newRankTier;
                     document.getElementById('rank-image').src = newImageSrc;
                     if (hasLeaderboard) {
                         showLeaderboardBadge(newLeaderboardRank, shieldCount);
@@ -316,23 +376,25 @@
         
                 if (hasRankChanged(newRankTier)) {
                     changeRankImage(newImageSrc);
-                    if (getTierIndex(newRankTier) < getTierIndex(previousRankTier)) {
-                        rankRatingEl.style.color = 'red';
-                        animateRankChange(previousRankRating, 0, 1000, (value) => {
-                            rankRatingEl.textContent = `${value} RR`;
-                        }, () => {
-                            animateRankChange(99, newRankRating, 1000, (value) => {
-                                rankRatingEl.textContent = `${value} RR`;
-                            }, () => {
-                                rankRatingEl.style.color = 'white';
-                            });
-                        });
-                    } else if (getTierIndex(newRankTier) > getTierIndex(previousRankTier)) {
+                    const tierWentUp = getTierIndex(newRankTier) > getTierIndex(previousRankTier);
+                    if (tierWentUp) {
+                        animateShieldOutForRankUp(!!hasLeaderboard);
                         rankRatingEl.style.color = 'green';
                         animateRankChange(previousRankRating, 99, 1000, (value) => {
                             rankRatingEl.textContent = `${value} RR`;
                         }, () => {
                             animateRankChange(0, newRankRating, 1000, (value) => {
+                                rankRatingEl.textContent = `${value} RR`;
+                            }, () => {
+                                rankRatingEl.style.color = 'white';
+                            });
+                        });
+                    } else {
+                        rankRatingEl.style.color = 'red';
+                        animateRankChange(previousRankRating, 0, 1000, (value) => {
+                            rankRatingEl.textContent = `${value} RR`;
+                        }, () => {
+                            animateRankChange(99, newRankRating, 1000, (value) => {
                                 rankRatingEl.textContent = `${value} RR`;
                             }, () => {
                                 rankRatingEl.style.color = 'white';
