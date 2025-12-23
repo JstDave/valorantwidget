@@ -7,9 +7,7 @@
     <title>Valorant Rank Display</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
-        html, body {
-            height: 100%;
-        }
+        html, body { height: 100%; }
         body {
             margin: 0;
             display: flex;
@@ -67,26 +65,20 @@
             margin-top: -20px;
             margin-left: 0px;
             opacity: 1;
-            transition: opacity 400ms ease, height 400ms ease, margin-top 400ms ease;
+            transition: opacity 300ms ease, height 400ms ease, margin-top 400ms ease;
             height: auto;
             overflow: shown;
         }
-        .shield-hidden {
-            opacity: 0;
-            height: 0;
-            margin: 0;
-            overflow: hidden;
-        }
-        .rank-rating-expanded {
-            margin-bottom: 20px;
-        }
+        .shield-hidden { opacity: 0; height: 0; margin: 0; overflow: hidden; }
+        .rank-rating-expanded { margin-bottom: 20px; }
         #shield-image {
             max-width: 80px;
             height: auto;
             margin: 0;
             filter: drop-shadow(10px 10px 8px #000000);
             margin-right: 10px;
-            transition: opacity 400ms ease;
+            transition: opacity 250ms ease, transform 250ms ease;
+            will-change: opacity, transform;
         }
         #shield-count {
             color: white;
@@ -96,26 +88,18 @@
             position: static;
             transform: none;
             filter: drop-shadow(10px 10px 8px #000000);
-            transition: color 0.5s ease-in-out;
+            transition: color 0.5s ease-in-out, opacity 250ms ease, transform 250ms ease;
+            opacity: 1;
         }
+        .shield-icon-hidden #shield-count { transform: translateX(-12px); }
         .fade-out { animation: fadeOut 1s forwards; }
-        .fade-in { animation: fadeIn 1s forwards; }
+        .fade-in  { animation: fadeIn  1s forwards; }
         @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        .shield-fade-out {
-            opacity: 0 !important;
-            height: 0 !important;
-            margin-top: 0 !important;
-        }
-        .center-rr {
-            align-items: center !important;
-        }
+        @keyframes fadeIn  { from { opacity: 0; } to { opacity: 1; } }
+        .shield-fade-out { opacity: 0 !important; height: 0 !important; margin-top: 0 !important; }
+        .center-rr { align-items: center !important; }
         @media (max-width: 1200px) {
-            .rank-box {
-                width: 92vw;
-                height: auto;
-                min-height: 280px;
-            }
+            .rank-box { width: 92vw; height: auto; min-height: 280px; }
             .rank-box h1 { font-size: 12vw; }
             #shield-count { font-size: 6.5vw; }
             .rank-box img { max-width: 40vw; }
@@ -126,7 +110,7 @@
             inset: 0;
             background: rgba(10,10,10,0.85);
             backdrop-filter: blur(4px);
-            display: none; /* shown conditionally */
+            display: none;
             align-items: center;
             justify-content: center;
             z-index: 9999;
@@ -140,109 +124,61 @@
             color: #f2f2f2;
             box-shadow: 0 10px 40px rgba(0,0,0,0.6);
         }
-        .setup-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 14px;
-        }
-        .setup-title {
-            font-size: 22px;
-            font-weight: 700;
-            letter-spacing: 0.3px;
-        }
-        .setup-body {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 14px 16px;
-        }
-        .setup-body .full {
-            grid-column: 1 / -1;
-        }
-        .setup-field {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-        .setup-field label {
-            font-size: 13px;
-            color: #cfcfcf;
-        }
+        .setup-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+        .setup-title { font-size: 22px; font-weight: 700; letter-spacing: 0.3px; }
+        .setup-body { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 16px; }
+        .setup-body .full { grid-column: 1 / -1; }
+        .setup-field { display: flex; flex-direction: column; gap: 6px; }
+        .setup-field label { font-size: 13px; color: #cfcfcf; }
         .setup-field input, .setup-field select {
-            background: #2a2a2a;
-            border: 1px solid #555;
-            border-radius: 10px;
-            padding: 10px 12px;
-            color: #fff;
-            font-size: 14px;
-            outline: none;
+            background: #2a2a2a; border: 1px solid #555; border-radius: 10px; padding: 10px 12px; color: #fff; font-size: 14px; outline: none;
         }
         .setup-field input::placeholder { color: #9a9a9a; }
-        .setup-actions {
-            display: flex;
-            gap: 10px;
-            justify-content: flex-end;
-            margin-top: 12px;
-        }
-        .btn {
-            border: 0;
-            border-radius: 10px;
-            padding: 10px 14px;
-            font-weight: 600;
-            cursor: pointer;
-        }
+        .setup-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 12px; }
+        .btn { border: 0; border-radius: 10px; padding: 10px 14px; font-weight: 600; cursor: pointer; }
         .btn-primary { background: #e84a4a; color: white; }
         .btn-secondary { background: #3a3a3a; color: white; }
-        .danger-link {
-            color: #ffb3b3;
-            cursor: pointer;
-            text-decoration: underline;
-            font-size: 12px;
-        }
-        .setup-hint {
-            font-size: 12px;
-            color: #bfbfbf;
-            margin-top: 2px;
-        }
-        .setup-footer {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-top: 6px;
-        }
+        .danger-link { color: #ffb3b3; cursor: pointer; text-decoration: underline; font-size: 12px; }
+        .setup-hint { font-size: 12px; color: #bfbfbf; margin-top: 2px; }
+        .setup-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 6px; }
+
         .gear {
-			position: fixed;
-			top: 12px;
-			right: 12px;
-			width: 36px;
-			height: 36px;
-			border-radius: 50%;
-			display: grid;
-			place-items: center;
-			background: rgba(255,255,255,0.08);
-			color: #fff;
-			z-index: 9998;
-			cursor: pointer;
-			border: 1px solid #555;
-			opacity: 0;
-			transition: opacity 0.3s ease;
-			pointer-events: none;
-		}
-		.gear:hover { 
-			background: rgba(255,255,255,0.14); 
-		}
-		body:hover .gear {
-			opacity: 1;
-			pointer-events: auto;
-		}
-        .error {
-            color: #ff7b7b;
-            font-size: 12px;
+            position: fixed;
+            top: 12px;
+            right: 12px;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            background: rgba(255,255,255,0.08);
+            color: #fff;
+            z-index: 9998;
+            cursor: pointer;
+            border: 1px solid #555;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
         }
-        .success {
-            color: #8de88d;
+        .gear:hover { background: rgba(255,255,255,0.14); }
+        body:hover .gear { opacity: 1; pointer-events: auto; }
+        .error { color: #ff7b7b; font-size: 12px; }
+        .success { color: #8de88d; font-size: 12px; }
+
+        .dev-toggle {
+            position: fixed;
+            bottom: 12px;
+            right: 12px;
+            z-index: 9999;
             font-size: 12px;
+            background: rgba(0,0,0,0.7);
+            padding: 8px 12px;
+            border-radius: 8px;
+            color: #fff;
+            display: none;
         }
+        .dev-toggle label { cursor: pointer; }
+        .dev-toggle input { cursor: pointer; }
     </style>
 </head>
 
@@ -260,8 +196,12 @@
         </div>
     </div>
 
-    <div class="gear" id="open-setup" title="Open setup">
-        ⚙️
+    <div class="gear" id="open-setup" title="Open setup">⚙️</div>
+
+    <div class="dev-toggle" id="dev-toggle">
+        <label>
+            <input type="checkbox" id="use-mock-data"> Use Mock Data (Dev)
+        </label>
     </div>
 
     <div class="setup-overlay" id="setup-overlay" aria-hidden="true">
@@ -304,11 +244,11 @@
                         <option value="console">Console</option>
                     </select>
                 </div>
-				<div class="setup-field full">
-					<label for="backgroundUrl">Background Image URL (Optional)</label>
-					<input id="backgroundUrl" type="text" placeholder="https://example.com/your-image.png">
-					<div class="setup-hint">Leave blank to use the default background. Paste a direct image URL here.</div>
-				</div>
+                <div class="setup-field full">
+                    <label for="backgroundUrl">Background Image URL (Optional)</label>
+                    <input id="backgroundUrl" type="text" placeholder="https://example.com/your-image.png">
+                    <div class="setup-hint">Leave blank to use the default background. Paste a direct image URL here.</div>
+                </div>
                 <div class="setup-field full">
                     <div id="setup-message" class=""></div>
                 </div>
@@ -324,563 +264,665 @@
     </div>
 
     <script>
-
-		// Please add your information here
-        let API_KEY    = "YOUR_API_KEY";	// Please add your API key here
-        let USERNAME   = "YOUR_USERNAME";	// Please add your username here (for example "JstDave" for the name "JstDave#JST")
-        let TAG        = "YOUR_TAG";		// Please add your tag here (for example "JST" for the name "JstDave#JST"
-        let REGION     = "YOUR_REGION";		// Please add your region here (eu, na, latam, br, ap, kr)
-        let PLATFORM   = "YOUR_PLATFORM";	// Please add your platform here (pc, console)
-		
-		
-        const LS_KEY = "valorant_widget_settings_v1";
-
-        function getQueryParams() {
-            const sp = new URLSearchParams(window.location.search);
-            const obj = {};
-            for (const [k, v] of sp.entries()) obj[k.toLowerCase()] = v;
-            return obj;
-        }
-
-        function normalizeRegion(v) {
-            if (!v) return "";
-            const m = v.toLowerCase();
-            const map = { na:"na", eu:"eu", latam:"latam", br:"br", ap:"ap", kr:"kr" };
-            return map[m] || "";
-        }
-        function normalizePlatform(v) {
-            if (!v) return "";
-            const m = v.toLowerCase();
-            if (m === "pc" || m === "computer") return "pc";
-            if (m === "console" || m === "ps" || m === "xbox" || m === "ps5" || m === "ps4") return "console";
-            return "";
-        }
-
-        function loadFromLocalStorage() {
-            try {
-                const raw = localStorage.getItem(LS_KEY);
-                if (!raw) return null;
-                return JSON.parse(raw);
-            } catch { return null; }
-        }
-
-        function saveToLocalStorage(settings) {
-            localStorage.setItem(LS_KEY, JSON.stringify(settings));
-        }
-
-        function applySettings(settings) {
-			API_KEY  = settings.apiKey || API_KEY;
-			USERNAME = settings.username || USERNAME;
-			TAG      = settings.tag || TAG;
-			REGION   = settings.region || REGION;
-			PLATFORM = settings.platform || PLATFORM;
-			
-			if (settings.backgroundUrl) {
-				applyBackgroundImage(settings.backgroundUrl);
-			}
-		}
-		
-		function applyBackgroundImage(backgroundUrl) {
-			if (backgroundUrl) {
-				const rankBox = document.querySelector('.rank-box');
-				rankBox.style.backgroundImage = `url('${backgroundUrl}')`;
-			}
-		}
-
-        function settingsComplete(s) {
-            return s &&
-                   s.apiKey && s.apiKey !== "YOUR_API_KEY" &&
-                   s.username && s.username !== "YOUR_USERNAME" &&
-                   s.tag && s.tag !== "YOUR_TAG" &&
-                   s.region && s.region !== "YOUR_REGION" &&
-                   s.platform && s.platform !== "YOUR_PLATFORM";
-        }
-
-        function buildConfiguredURL(s) {
-			const url = new URL(window.location.href);
-			url.searchParams.set("api_key", s.apiKey);
-			url.searchParams.set("username", s.username);
-			url.searchParams.set("tag", s.tag);
-			url.searchParams.set("region", s.region);
-			url.searchParams.set("platform", s.platform);
-			if (s.backgroundUrl) {
-				url.searchParams.set("background_url", s.backgroundUrl);
-			}
-			return url.toString();
-		}
-
-        function initSettings() {
-			const q = getQueryParams();
-			const fromURL = {
-				apiKey: q.api_key || "",
-				username: q.username || "",
-				tag: q.tag || "",
-				region: normalizeRegion(q.region),
-				platform: normalizePlatform(q.platform),
-				backgroundUrl: q.background_url || "",
-			};
-			const ls = loadFromLocalStorage();
-
-			let chosen = {
-				apiKey: fromURL.apiKey || (ls?.apiKey || ""),
-				username: fromURL.username || (ls?.username || ""),
-				tag: fromURL.tag || (ls?.tag || ""),
-				region: fromURL.region || (ls?.region || ""),
-				platform: fromURL.platform || (ls?.platform || ""),
-				backgroundUrl: fromURL.backgroundUrl || (ls?.backgroundUrl || ""),
-			};
-
-			if (settingsComplete(chosen)) {
-				applySettings(chosen);
-			} else {
-				applySettings(chosen);
-			}
-
-			return chosen;
-		}
-
-        function showSetupOverlay(prefill = {}) {
-			const ov = document.getElementById("setup-overlay");
-			const apiKeyEl = document.getElementById("apiKey");
-			const usernameEl = document.getElementById("username");
-			const tagEl = document.getElementById("tag");
-			const regionEl = document.getElementById("region");
-			const platformEl = document.getElementById("platform");
-			const backgroundUrlEl = document.getElementById("backgroundUrl");
-			const msgEl = document.getElementById("setup-message");
-
-			apiKeyEl.value = prefill.apiKey || API_KEY || "";
-			usernameEl.value = prefill.username || USERNAME || "";
-			tagEl.value = prefill.tag || TAG || "";
-			regionEl.value = normalizeRegion(prefill.region || REGION) || "";
-			platformEl.value = normalizePlatform(prefill.platform || PLATFORM) || "";
-			backgroundUrlEl.value = prefill.backgroundUrl || "";
-
-			msgEl.textContent = "";
-			msgEl.className = "";
-
-			ov.style.display = "flex";
-			ov.setAttribute("aria-hidden", "false");
-		}
-		
-        function hideSetupOverlay() {
-            const ov = document.getElementById("setup-overlay");
-            ov.style.display = "none";
-            ov.setAttribute("aria-hidden", "true");
-        }
-
-        function collectForm() {
-			const apiKey = document.getElementById("apiKey").value.trim();
-			const username = document.getElementById("username").value.trim();
-			const tag = document.getElementById("tag").value.trim();
-			const region = normalizeRegion(document.getElementById("region").value.trim());
-			const platform = normalizePlatform(document.getElementById("platform").value.trim());
-			const backgroundUrl = document.getElementById("backgroundUrl").value.trim();
-
-			const errors = [];
-			if (!apiKey) errors.push("API Key is required.");
-			if (!username) errors.push("Username is required.");
-			if (!tag) errors.push("Tag is required.");
-			if (!region) errors.push("Valid region is required (na, eu, latam, br, ap, kr).");
-			if (!platform) errors.push("Platform is required (pc or console).");
-
-			return {
-				valid: errors.length === 0,
-				errors,
-				data: { apiKey, username, tag, region, platform, backgroundUrl }
-			};
-		}
-
-        function wireSetupUI() {
-            document.getElementById("open-setup").addEventListener("click", () => {
-                showSetupOverlay();
-            });
-            document.getElementById("close-setup").addEventListener("click", () => {
-                hideSetupOverlay();
-            });
-            document.getElementById("reset-setup").addEventListener("click", () => {
-                localStorage.removeItem(LS_KEY);
-                const msg = document.getElementById("setup-message");
-                msg.className = "success";
-                msg.textContent = "Saved settings cleared. The overlay will prompt again if values are missing.";
-            });
-            document.getElementById("copy-url").addEventListener("click", () => {
-                const r = collectForm();
-                if (!r.valid) {
-                    const msg = document.getElementById("setup-message");
-                    msg.className = "error";
-                    msg.textContent = r.errors.join(" ");
-                    return;
-                }
-                const url = buildConfiguredURL(r.data);
-                navigator.clipboard.writeText(url).then(() => {
-                    const msg = document.getElementById("setup-message");
-                    msg.className = "success";
-                    msg.textContent = "Configured URL copied to clipboard. Paste into OBS Browser Source.";
-                }).catch(() => {
-                    const msg = document.getElementById("setup-message");
-                    msg.className = "error";
-                    msg.textContent = "Failed to copy URL. You can manually copy from the address bar after pressing Save.";
-                });
-            });
-            document.getElementById("save-setup").addEventListener("click", () => {
-			const r = collectForm();
-			const msg = document.getElementById("setup-message");
-			if (!r.valid) {
-				msg.className = "error";
-				msg.textContent = r.errors.join(" ");
-				return;
-			}
-			saveToLocalStorage(r.data);
-			applySettings(r.data);
-			applyBackgroundImage(r.data.backgroundUrl); 
-			msg.className = "success";
-			msg.textContent = "Settings saved. Applying now...";
-
-			const url = new URL(window.location.href);
-			url.searchParams.set("api_key", r.data.apiKey);
-			url.searchParams.set("username", r.data.username);
-			url.searchParams.set("tag", r.data.tag);
-			url.searchParams.set("region", r.data.region);
-			url.searchParams.set("platform", r.data.platform);
-			if (r.data.backgroundUrl) {
-				url.searchParams.set("background_url", r.data.backgroundUrl);
-			}
-			window.history.replaceState({}, "", url.toString());
-
-			checkRank().then(() => {
-				hideSetupOverlay();
-			}).catch(() => {
-				msg.className = "error";
-				msg.textContent = "Saved, but fetching failed. Verify API key/values or try again.";
-			});
-		});
-        }
-		
-		document.addEventListener("mouseleave", () => {
-			const gear = document.getElementById("open-setup");
-			gear.style.opacity = "0";
-			gear.style.pointerEvents = "none";
-		});
-
-		document.addEventListener("mouseenter", () => {
-			const gear = document.getElementById("open-setup");
-			gear.style.opacity = "1";
-			gear.style.pointerEvents = "auto";
-		});
-
-        let previousRankRating = null;
-        let previousRankTier = null;
-        let previousLeaderboardRank = null;
-        let previousHadLeaderboard = null;
-
-        const tierOrder = [
-            'Iron 1', 'Iron 2', 'Iron 3',
-            'Bronze 1', 'Bronze 2', 'Bronze 3',
-            'Silver 1', 'Silver 2', 'Silver 3',
-            'Gold 1', 'Gold 2', 'Gold 3',
-            'Platinum 1', 'Platinum 2', 'Platinum 3',
-            'Diamond 1', 'Diamond 2', 'Diamond 3',
-            'Ascendant 1', 'Ascendant 2', 'Ascendant 3',
-            'Immortal 1', 'Immortal 2', 'Immortal 3',
-            'Radiant'
-        ];
-
-        const shieldImageUrls = [
-            "https://i.imgur.com/cmzimwM.png",
-            "https://i.imgur.com/MRUZa2i.png",
-            "https://i.imgur.com/39PDFlA.png"
-        ];
-
-        function easeInOutQuad(t) {
-            return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
-        }
-
-        function isFirstRankOfTier(rankName) {
-            if (rankName === 'Radiant') return false;
-            if (rankName.startsWith('Immortal') && !rankName.endsWith(' 1')) return false;
-            return rankName.endsWith(' 1');
-        }
-
-        function updateShieldVisibility(rankTier, shieldCount, animate = true) {
-            const shieldContainer = document.querySelector('.shield-container');
-            const rightContent = document.querySelector('.right-content');
-            const shieldImg = document.getElementById('shield-image');
-            const shieldText = document.getElementById('shield-count');
-
-            const shouldShow = isFirstRankOfTier(rankTier);
-
-            if (shouldShow) {
-                rightContent.classList.add('rank-rating-expanded');
-                rightContent.classList.remove('center-rr');
-                shieldContainer.classList.remove('shield-fade-out');
-                if (animate) {
-                    setTimeout(() => shieldContainer.classList.remove('shield-hidden'), 10);
-                } else {
-                    shieldContainer.classList.remove('shield-hidden');
-                }
-                const text = shieldCount === 1 ? 'Shield' : 'Shields';
-                shieldText.textContent = `${shieldCount} ${text}`;
-                shieldImg.src = shieldImageUrls[shieldCount] || shieldImageUrls[0];
-                shieldImg.style.display = '';
-                shieldImg.style.opacity = '1';
-            } else {
-                if (animate) {
-                    shieldContainer.classList.add('shield-fade-out');
-                    setTimeout(() => {
-                        shieldContainer.classList.add('shield-hidden');
-                        rightContent.classList.remove('rank-rating-expanded');
-                        rightContent.classList.add('center-rr');
-                    }, 400);
-                } else {
-                    shieldContainer.classList.add('shield-hidden');
-                    shieldContainer.classList.remove('shield-fade-out');
-                    rightContent.classList.remove('rank-rating-expanded');
-                    rightContent.classList.add('center-rr');
-                }
-            }
-        }
-
-        function animateNumber(start, end, duration, onUpdate, onComplete) {
-            const startTime = performance.now();
-            const change = end - start;
-            function step(currentTime) {
-                const elapsedTime = currentTime - startTime;
-                const progress = Math.min(elapsedTime / duration, 1);
-                const easedProgress = easeInOutQuad(progress);
-                const currentValue = start + easedProgress * change;
-                onUpdate(Math.round(currentValue));
-                if (progress < 1) {
-                    requestAnimationFrame(step);
-                } else if (onComplete) {
-                    onComplete();
-                }
-            }
-            requestAnimationFrame(step);
-        }
-
-        function animateRankChange(start, end, duration, onUpdate, onComplete) {
-            animateNumber(start, end, duration, onUpdate, onComplete);
-        }
-
-        function animateLeaderboardChange(start, end, duration, onUpdate, onComplete) {
-            animateNumber(start, end, duration, onUpdate, onComplete);
-        }
-
-        function changeRankImage(newSrc) {
-            const rankImage = document.getElementById('rank-image');
-            rankImage.classList.add('fade-out');
-            const imgPreload = new Image();
-            imgPreload.src = newSrc;
-            imgPreload.onload = () => {
-                setTimeout(() => {
-                    rankImage.src = newSrc;
-                    rankImage.classList.remove('fade-out');
-                    rankImage.classList.add('fade-in');
-                    setTimeout(() => {
-                        rankImage.classList.remove('fade-in');
-                    }, 1000);
-                }, 1000);
-            };
-        }
-
-        function getTierIndex(tier) {
-            return tierOrder.indexOf(tier);
-        }
-
-        function hasRankChanged(newTier) {
-            return previousRankTier && getTierIndex(newTier) !== getTierIndex(previousRankTier);
-        }
-
-        function animateShieldOutForRankUp(hasLeaderboard) {
-            const shieldContainer = document.querySelector('.shield-container');
-            const rightContent = document.querySelector('.right-content');
-            const shieldImg = document.getElementById('shield-image');
-
-            rightContent.classList.add('center-rr');
-
-            if (hasLeaderboard) {
-                shieldImg.style.opacity = '0';
-                setTimeout(() => {
-                    shieldImg.style.display = 'none';
-                    shieldImg.style.opacity = '';
-                }, 400);
-            } else {
-                shieldContainer.classList.add('shield-fade-out');
-                setTimeout(() => {
-                    shieldContainer.classList.add('shield-hidden');
-                    rightContent.classList.remove('rank-rating-expanded');
-                }, 400);
-            }
-        }
-
-        function showLeaderboardBadge(rankNumber, shieldCount) {
-            const shieldContainer = document.querySelector('.shield-container');
-            const rightContent = document.querySelector('.right-content');
-            const shieldImg = document.getElementById('shield-image');
-            const shieldText = document.getElementById('shield-count');
-            rightContent.classList.add('rank-rating-expanded');
-            shieldContainer.classList.remove('shield-hidden');
-            shieldContainer.classList.remove('shield-fade-out');
-
-            const rankRatingEl = document.getElementById('rank-rating');
-            const currentRankTier = rankRatingEl?.dataset?.tierName || '';
-            const hideShieldIcon = currentRankTier === 'Radiant' || currentRankTier === 'Immortal 2' || currentRankTier === 'Immortal 3';
-
-            if (hideShieldIcon) {
-                shieldImg.style.display = 'none';
-            } else {
-                shieldImg.style.display = '';
-                shieldImg.style.opacity = '1';
-                shieldImg.src = shieldImageUrls[shieldCount] || shieldImageUrls[0];
-            }
-
-            shieldText.textContent = `#${rankNumber}`;
-        }
-
-        function showShieldsOrHide(rankTier, shieldCount) {
-            updateShieldVisibility(rankTier, shieldCount);
-        }
-
-        async function checkRank() {
-            try {
-                const configOk = API_KEY && API_KEY !== "YOUR_API_KEY" &&
-                                 USERNAME && USERNAME !== "YOUR_USERNAME" &&
-                                 TAG && TAG !== "YOUR_TAG" &&
-                                 REGION && REGION !== "YOUR_REGION" &&
-                                 PLATFORM && PLATFORM !== "YOUR_PLATFORM";
-                if (!configOk) {
-                    showSetupOverlay();
-                    throw new Error("Missing configuration. Open setup to continue.");
-                }
-
-                const url = `https://api.henrikdev.xyz/valorant/v3/mmr/${REGION}/${PLATFORM}/${encodeURIComponent(USERNAME)}/${encodeURIComponent(TAG)}?api_key=${encodeURIComponent(API_KEY)}`;
-                const response = await fetch(url);
-                if (!response.ok) {
-                    if (response.status === 401 || response.status === 403) {
-                        showSetupOverlay();
-                    }
-                    throw new Error(`API request failed with status ${response.status}`);
-                }
-                const data = await response.json();
-                const currentData = data.data.current;
-                const shieldCount = currentData.rank_protection_shields || 0;
-                const newRankTier = currentData.tier.name;
-                const newRankTierShort = currentData.tier.id;
-                const newRankRating = currentData.rr;
-                const leaderboardPlacement = currentData.leaderboard_placement;
-                const hasLeaderboard = leaderboardPlacement && typeof leaderboardPlacement.rank === 'number';
-                const newLeaderboardRank = hasLeaderboard ? leaderboardPlacement.rank : null;
-                const newImageSrc = `https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/${newRankTierShort}/largeicon.png`;
-
-                const rankRatingEl = document.getElementById('rank-rating');
-                const shieldTextEl = document.getElementById('shield-count');
-
-                rankRatingEl.dataset.tierName = newRankTier;
-
-                if (previousRankTier === null || previousRankRating === null || previousHadLeaderboard === null) {
-                    document.getElementById('rank-rating').textContent = `${newRankRating} RR`;
-                    document.getElementById('rank-rating').dataset.tierName = newRankTier;
-                    document.getElementById('rank-image').src = newImageSrc;
-                    if (hasLeaderboard) {
-                        showLeaderboardBadge(newLeaderboardRank, shieldCount);
-                    } else {
-                        updateShieldVisibility(newRankTier, shieldCount, false);
-                    }
-                    previousRankRating = newRankRating;
-                    previousRankTier = newRankTier;
-                    previousLeaderboardRank = newLeaderboardRank;
-                    previousHadLeaderboard = !!hasLeaderboard;
-                    return;
-                }
-
-                if (hasRankChanged(newRankTier)) {
-                    changeRankImage(newImageSrc);
-                    const tierWentUp = getTierIndex(newRankTier) > getTierIndex(previousRankTier);
-                    if (tierWentUp) {
-                        animateShieldOutForRankUp(!!hasLeaderboard);
-                        rankRatingEl.style.color = 'green';
-                        animateRankChange(previousRankRating, 99, 1000, (value) => {
-                            rankRatingEl.textContent = `${value} RR`;
-                        }, () => {
-                            animateRankChange(0, newRankRating, 1000, (value) => {
-                                rankRatingEl.textContent = `${value} RR`;
-                            }, () => {
-                                rankRatingEl.style.color = 'white';
-                            });
-                        });
-                    } else {
-                        rankRatingEl.style.color = 'red';
-                        animateRankChange(previousRankRating, 0, 1000, (value) => {
-                            rankRatingEl.textContent = `${value} RR`;
-                        }, () => {
-                            animateRankChange(99, newRankRating, 1000, (value) => {
-                                rankRatingEl.textContent = `${value} RR`;
-                            }, () => {
-                                rankRatingEl.style.color = 'white';
-                            });
-                        });
-                    }
-                } else {
-                    if (newRankRating > previousRankRating) {
-                        rankRatingEl.style.color = 'green';
-                    } else if (newRankRating < previousRankRating) {
-                        rankRatingEl.style.color = 'red';
-                    }
-                    animateRankChange(previousRankRating, newRankRating, 1000, (value) => {
-                        rankRatingEl.textContent = `${value} RR`;
-                    }, () => {
-                        rankRatingEl.style.color = 'white';
-                    });
-                }
-
-                if (hasLeaderboard) {
-                    const goingUpInLeaderboard = previousLeaderboardRank !== null && newLeaderboardRank < previousLeaderboardRank;
-                    const goingDownInLeaderboard = previousLeaderboardRank !== null && newLeaderboardRank > previousLeaderboardRank;
-                    if (goingUpInLeaderboard) {
-                        shieldTextEl.style.color = 'green';
-                    } else if (goingDownInLeaderboard) {
-                        shieldTextEl.style.color = 'red';
-                    }
-                    if (!previousHadLeaderboard) {
-                        showLeaderboardBadge(newLeaderboardRank, shieldCount);
-                        shieldTextEl.style.color = 'white';
-                    } else {
-                        showLeaderboardBadge(previousLeaderboardRank ?? newLeaderboardRank, shieldCount);
-                        animateLeaderboardChange(previousLeaderboardRank ?? newLeaderboardRank, newLeaderboardRank, 1000, (value) => {
-                            shieldTextEl.textContent = `#${value}`;
-                        }, () => {
-                            shieldTextEl.style.color = 'white';
-                        });
-                    }
-                } else {
-                    showShieldsOrHide(newRankTier, shieldCount);
-                }
-
-                previousRankRating = newRankRating;
-                previousRankTier = newRankTier;
-                previousHadLeaderboard = !!hasLeaderboard;
-                previousLeaderboardRank = newLeaderboardRank;
-            } catch (error) {
-                console.error('Error fetching rank data:', error);
-            }
-        }
-
-        (function bootstrap() {
-            const chosen = initSettings();
-            wireSetupUI();
-
-            const needSetup = !settingsComplete({
-                apiKey: API_KEY, username: USERNAME, tag: TAG, region: REGION, platform: PLATFORM
-            });
-            if (needSetup) {
-                showSetupOverlay(chosen);
-            }
-
-            setInterval(checkRank, 60000);
-            checkRank();
-        })();
+        		let API_KEY    = "YOUR_API_KEY";    // API key
+        		let USERNAME   = "YOUR_USERNAME";   // Username before '#'
+        		let TAG        = "YOUR_TAG";        // Tag after '#'
+        		let REGION     = "YOUR_REGION";     // eu, na, latam, br, ap, kr
+        		let PLATFORM   = "YOUR_PLATFORM";   // pc, console
+        
+        		let previousRankRating = null;
+        		let previousRankTier = null;
+        		let previousLeaderboardRank = null;
+        		let previousHadLeaderboard = null;
+        		let previousShieldCount = null;
+        
+        		let suppressShieldUpdates = false;
+        		let shieldSettleTimer = null;
+        
+        		function withShieldSuppressed(durationMs, afterUnlock) {
+        			suppressShieldUpdates = true;
+        			if (shieldSettleTimer) clearTimeout(shieldSettleTimer);
+        			shieldSettleTimer = setTimeout(() => {
+        				suppressShieldUpdates = false;
+        				if (typeof afterUnlock === 'function') afterUnlock();
+        			}, durationMs);
+        		}
+        
+        		const LS_KEY = "valorant_widget_settings_v1";
+        
+        		function getQueryParams() {
+        			const sp = new URLSearchParams(window.location.search);
+        			const obj = {};
+        			for (const [k, v] of sp.entries()) obj[k.toLowerCase()] = v;
+        			return obj;
+        		}
+        		function normalizeRegion(v) {
+        			if (!v) return "";
+        			const m = v.toLowerCase();
+        			const map = { na:"na", eu:"eu", latam:"latam", br:"br", ap:"ap", kr:"kr" };
+        			return map[m] || "";
+        		}
+        		function normalizePlatform(v) {
+        			if (!v) return "";
+        			const m = v.toLowerCase();
+        			if (m === "pc" || m === "computer") return "pc";
+        			if (m === "console" || m === "ps" || m === "xbox" || m === "ps5" || m === "ps4") return "console";
+        			return "";
+        		}
+        		function loadFromLocalStorage() {
+        			try { const raw = localStorage.getItem(LS_KEY); if (!raw) return null; return JSON.parse(raw); }
+        			catch { return null; }
+        		}
+        		function saveToLocalStorage(settings) { localStorage.setItem(LS_KEY, JSON.stringify(settings)); }
+        		function applySettings(settings) {
+        			API_KEY  = settings.apiKey || API_KEY;
+        			USERNAME = settings.username || USERNAME;
+        			TAG      = settings.tag || TAG;
+        			REGION   = settings.region || REGION;
+        			PLATFORM = settings.platform || PLATFORM;
+        			if (settings.backgroundUrl) applyBackgroundImage(settings.backgroundUrl);
+        		}
+        		function applyBackgroundImage(backgroundUrl) {
+        			if (backgroundUrl) {
+        				const rankBox = document.querySelector('.rank-box');
+        				rankBox.style.backgroundImage = `url('${backgroundUrl}')`;
+        			}
+        		}
+        		function settingsComplete(s) {
+        			return s &&
+        				   s.apiKey && s.apiKey !== "YOUR_API_KEY" &&
+        				   s.username && s.username !== "YOUR_USERNAME" &&
+        				   s.tag && s.tag !== "YOUR_TAG" &&
+        				   s.region && s.region !== "YOUR_REGION" &&
+        				   s.platform && s.platform !== "YOUR_PLATFORM";
+        		}
+        		function buildConfiguredURL(s) {
+        			const url = new URL(window.location.href);
+        			url.searchParams.set("api_key", s.apiKey);
+        			url.searchParams.set("username", s.username);
+        			url.searchParams.set("tag", s.tag);
+        			url.searchParams.set("region", s.region);
+        			url.searchParams.set("platform", s.platform);
+        			if (s.backgroundUrl) url.searchParams.set("background_url", s.backgroundUrl);
+        			return url.toString();
+        		}
+        		function initSettings() {
+        			const q = getQueryParams();
+        			if (q.dev === '1' || q.dev === 'true') {
+        				const devToggle = document.getElementById('dev-toggle');
+        				if (devToggle) devToggle.style.display = 'block';
+        			}
+        			const fromURL = {
+        				apiKey: q.api_key || "",
+        				username: q.username || "",
+        				tag: q.tag || "",
+        				region: normalizeRegion(q.region),
+        				platform: normalizePlatform(q.platform),
+        				backgroundUrl: q.background_url || "",
+        			};
+        			const ls = loadFromLocalStorage();
+        			let chosen = {
+        				apiKey: fromURL.apiKey || (ls?.apiKey || ""),
+        				username: fromURL.username || (ls?.username || ""),
+        				tag: fromURL.tag || (ls?.tag || ""),
+        				region: fromURL.region || (ls?.region || ""),
+        				platform: fromURL.platform || (ls?.platform || ""),
+        				backgroundUrl: fromURL.backgroundUrl || (ls?.backgroundUrl || ""),
+        			};
+        			applySettings(chosen);
+        			return chosen;
+        		}
+        		function showSetupOverlay(prefill = {}) {
+        			const ov = document.getElementById("setup-overlay");
+        			const apiKeyEl = document.getElementById("apiKey");
+        			const usernameEl = document.getElementById("username");
+        			const tagEl = document.getElementById("tag");
+        			const regionEl = document.getElementById("region");
+        			const platformEl = document.getElementById("platform");
+        			const backgroundUrlEl = document.getElementById("backgroundUrl");
+        			const msgEl = document.getElementById("setup-message");
+        			apiKeyEl.value = prefill.apiKey || API_KEY || "";
+        			usernameEl.value = prefill.username || USERNAME || "";
+        			tagEl.value = prefill.tag || TAG || "";
+        			regionEl.value = normalizeRegion(prefill.region || REGION) || "";
+        			platformEl.value = normalizePlatform(prefill.platform || PLATFORM) || "";
+        			backgroundUrlEl.value = prefill.backgroundUrl || "";
+        			msgEl.textContent = "";
+        			msgEl.className = "";
+        			ov.style.display = "flex";
+        			ov.setAttribute("aria-hidden", "false");
+        		}
+        		function hideSetupOverlay() {
+        			const ov = document.getElementById("setup-overlay");
+        			ov.style.display = "none";
+        			ov.setAttribute("aria-hidden", "true");
+        		}
+        		function collectForm() {
+        			const apiKey = document.getElementById("apiKey").value.trim();
+        			const username = document.getElementById("username").value.trim();
+        			const tag = document.getElementById("tag").value.trim();
+        			const region = normalizeRegion(document.getElementById("region").value.trim());
+        			const platform = normalizePlatform(document.getElementById("platform").value.trim());
+        			const backgroundUrl = document.getElementById("backgroundUrl").value.trim();
+        			const errors = [];
+        			if (!apiKey) errors.push("API Key is required.");
+        			if (!username) errors.push("Username is required.");
+        			if (!tag) errors.push("Tag is required.");
+        			if (!region) errors.push("Valid region is required (na, eu, latam, br, ap, kr).");
+        			if (!platform) errors.push("Platform is required (pc or console).");
+        			return { valid: errors.length === 0, errors, data: { apiKey, username, tag, region, platform, backgroundUrl } };
+        		}
+        		function wireSetupUI() {
+        			document.getElementById("open-setup").addEventListener("click", () => { showSetupOverlay(); });
+        			document.getElementById("close-setup").addEventListener("click", () => { hideSetupOverlay(); });
+        			document.getElementById("reset-setup").addEventListener("click", () => {
+        				localStorage.removeItem(LS_KEY);
+        				const msg = document.getElementById("setup-message");
+        				msg.className = "success";
+        				msg.textContent = "Saved settings cleared. The overlay will prompt again if values are missing.";
+        			});
+        			document.getElementById("copy-url").addEventListener("click", () => {
+        				const r = collectForm();
+        				if (!r.valid) {
+        					const msg = document.getElementById("setup-message");
+        					msg.className = "error";
+        					msg.textContent = r.errors.join(" ");
+        					return;
+        				}
+        				const url = buildConfiguredURL(r.data);
+        				navigator.clipboard.writeText(url).then(() => {
+        					const msg = document.getElementById("setup-message");
+        					msg.className = "success";
+        					msg.textContent = "Configured URL copied to clipboard. Paste into OBS Browser Source.";
+        				}).catch(() => {
+        					const msg = document.getElementById("setup-message");
+        					msg.className = "error";
+        					msg.textContent = "Failed to copy URL. You can manually copy from the address bar after pressing Save.";
+        				});
+        			});
+        			document.getElementById("save-setup").addEventListener("click", () => {
+        				const r = collectForm();
+        				const msg = document.getElementById("setup-message");
+        				if (!r.valid) {
+        					msg.className = "error";
+        					msg.textContent = r.errors.join(" ");
+        					return;
+        				}
+        				saveToLocalStorage(r.data);
+        				applySettings(r.data);
+        				applyBackgroundImage(r.data.backgroundUrl);
+        				msg.className = "success";
+        				msg.textContent = "Settings saved. Applying now...";
+        				const url = new URL(window.location.href);
+        				url.searchParams.set("api_key", r.data.apiKey);
+        				url.searchParams.set("username", r.data.username);
+        				url.searchParams.set("tag", r.data.tag);
+        				url.searchParams.set("region", r.data.region);
+        				url.searchParams.set("platform", r.data.platform);
+        				if (r.data.backgroundUrl) url.searchParams.set("background_url", r.data.backgroundUrl);
+        				window.history.replaceState({}, "", url.toString());
+        				checkRank().then(() => { hideSetupOverlay(); }).catch(() => {
+        					msg.className = "error";
+        					msg.textContent = "Saved, but fetching failed. Verify API key/values or try again.";
+        				});
+        			});
+        		}
+        		document.addEventListener("mouseleave", () => {
+        			const gear = document.getElementById("open-setup");
+        			gear.style.opacity = "0";
+        			gear.style.pointerEvents = "none";
+        		});
+        		document.addEventListener("mouseenter", () => {
+        			const gear = document.getElementById("open-setup");
+        			gear.style.opacity = "1";
+        			gear.style.pointerEvents = "auto";
+        		});
+        
+        		const tierOrder = [
+        			'Iron 1', 'Iron 2', 'Iron 3',
+        			'Bronze 1', 'Bronze 2', 'Bronze 3',
+        			'Silver 1', 'Silver 2', 'Silver 3',
+        			'Gold 1', 'Gold 2', 'Gold 3',
+        			'Platinum 1', 'Platinum 2', 'Platinum 3',
+        			'Diamond 1', 'Diamond 2', 'Diamond 3',
+        			'Ascendant 1', 'Ascendant 2', 'Ascendant 3',
+        			'Immortal 1', 'Immortal 2', 'Immortal 3',
+        			'Radiant'
+        		];
+        		const shieldImageUrls = [
+        			"https://i.imgur.com/cmzimwM.png",
+        			"https://i.imgur.com/MRUZa2i.png",
+        			"https://i.imgur.com/39PDFlA.png"
+        		];
+        		function easeInOutQuad(t) { return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t; }
+        		function isFirstRankOfTier(rankName) {
+        			if (rankName === 'Radiant') return false;
+        			if (rankName.startsWith('Immortal') && !rankName.endsWith(' 1')) return false;
+        			return rankName.endsWith(' 1');
+        		}
+        
+        		function setRowMode(mode) {
+        			const row = document.querySelector('.shield-container');
+        			if (!row) return;
+        			row.dataset.mode = mode; 
+        		}
+        		function getRowMode() {
+        			const row = document.querySelector('.shield-container');
+        			return row?.dataset?.mode || '';
+        		}
+        		function setShieldTextInstant(newText) {
+        			const shieldText = document.getElementById('shield-count');
+        			shieldText.style.opacity = '1';
+        			shieldText.style.transform = 'translateY(0)';
+        			shieldText.textContent = newText;
+        		}
+        		function crossfadeShieldText(newText) {
+        			const shieldText = document.getElementById('shield-count');
+        			shieldText.style.opacity = '0';
+        			shieldText.style.transform = 'translateY(4px)';
+        			setTimeout(() => {
+        				shieldText.textContent = newText;
+        				shieldText.style.opacity = '1';
+        				shieldText.style.transform = 'translateY(0)';
+        			}, 180);
+        		}
+        
+        		function animateShieldIconVisibility(show) {
+        			const shieldContainer = document.querySelector('.shield-container');
+        			const shieldImg = document.getElementById('shield-image');
+        			if (show) {
+        				shieldImg.style.display = '';
+        				shieldContainer.classList.remove('shield-icon-hidden');
+        				requestAnimationFrame(() => {
+        					shieldImg.style.opacity = '1';
+        					shieldImg.style.transform = 'translateX(0)';
+        				});
+        			} else {
+        				shieldImg.style.opacity = '0';
+        				shieldImg.style.transform = 'translateX(-10px)';
+        				shieldContainer.classList.add('shield-icon-hidden');
+        				setTimeout(() => {
+        					shieldImg.style.display = 'none';
+        				}, 250);
+        			}
+        		}
+        		
+        		function crossfadeShieldIcon(newSrc) {
+        			const shieldImg = document.getElementById('shield-image');
+        			shieldImg.style.opacity = '0';
+        			shieldImg.style.transform = 'translateX(-10px)';
+        			setTimeout(() => {
+        				shieldImg.src = newSrc;
+        				shieldImg.style.display = '';
+        				requestAnimationFrame(() => {
+        					shieldImg.style.transform = 'translateX(0)';
+        					shieldImg.style.opacity = '1';
+        				});
+        			}, 180);
+        		}
+        
+        		function updateShieldVisibility(rankTier, shieldCount, animate = true) {
+        			if (suppressShieldUpdates) return;
+        			const shieldContainer = document.querySelector('.shield-container');
+        			const rightContent = document.querySelector('.right-content');
+        			const shieldImg = document.getElementById('shield-image');
+        			const rankRatingEl = document.getElementById('rank-rating');
+        			const currentTier = rankRatingEl?.dataset?.tierName || rankTier || "";
+        			const shouldShow = isFirstRankOfTier(currentTier);
+        
+        			if (shouldShow) {
+        				rightContent.classList.add('rank-rating-expanded');
+        				rightContent.classList.remove('center-rr');
+        				shieldContainer.classList.remove('shield-fade-out');
+        				if (animate) setTimeout(() => { shieldContainer.classList.remove('shield-hidden'); shieldContainer.style.opacity = '1'; }, 10);
+        				else { shieldContainer.classList.remove('shield-hidden'); shieldContainer.style.opacity = '1'; }
+        				shieldImg.src = shieldImageUrls[shieldCount] || shieldImageUrls[0];
+        				animateShieldIconVisibility(true);
+        
+        				const label = shieldCount === 1 ? 'Shield' : 'Shields';
+        				const shieldsText = `${shieldCount} ${label}`;
+        				const currentMode = getRowMode();
+        				if (currentMode !== 'shields') {
+        					crossfadeShieldText(shieldsText);
+        					setRowMode('shields');
+        				} else {
+        					setShieldTextInstant(shieldsText);
+        				}
+        			} else {
+        				if (animate) {
+        					const shieldText = document.getElementById('shield-count');
+        					shieldText.style.opacity = '0';
+        					animateShieldIconVisibility(false);
+        					shieldContainer.classList.add('shield-fade-out');
+        					setTimeout(() => {
+        						shieldContainer.classList.add('shield-hidden');
+        						shieldContainer.style.opacity = '0';
+        						rightContent.classList.remove('rank-rating-expanded');
+        						rightContent.classList.add('center-rr');
+        					}, 300);
+        				} else {
+        					animateShieldIconVisibility(false);
+        					shieldContainer.classList.add('shield-hidden');
+        					shieldContainer.classList.remove('shield-fade-out');
+        					shieldContainer.style.opacity = '0';
+        					rightContent.classList.remove('rank-rating-expanded');
+        					rightContent.classList.add('center-rr');
+        				}
+        			}
+        		}
+        
+        		function animateNumber(start, end, duration, onUpdate, onComplete) {
+        			const startTime = performance.now();
+        			const change = end - start;
+        			function step(currentTime) {
+        				const elapsedTime = currentTime - startTime;
+        				const progress = Math.min(elapsedTime / duration, 1);
+        				const easedProgress = easeInOutQuad(progress);
+        				const currentValue = start + easedProgress * change;
+        				onUpdate(Math.round(currentValue));
+        				if (progress < 1) requestAnimationFrame(step);
+        				else if (onComplete) onComplete();
+        			}
+        			requestAnimationFrame(step);
+        		}
+        		function animateRankChange(start, end, duration, onUpdate, onComplete) {
+        			animateNumber(start, end, duration, onUpdate, onComplete);
+        		}
+        		function animateLeaderboardChange(start, end, duration, onUpdate, onComplete) {
+        			animateNumber(start, end, duration, onUpdate, onComplete);
+        		}
+        		function changeRankImage(newSrc) {
+        			const rankImage = document.getElementById('rank-image');
+        			rankImage.classList.add('fade-out');
+        			const imgPreload = new Image();
+        			imgPreload.src = newSrc;
+        			imgPreload.onload = () => {
+        				setTimeout(() => {
+        					rankImage.src = newSrc;
+        					rankImage.classList.remove('fade-out');
+        					rankImage.classList.add('fade-in');
+        					setTimeout(() => { rankImage.classList.remove('fade-in'); }, 1000);
+        				}, 1000);
+        			};
+        		}
+        		function getTierIndex(tier) { return tierOrder.indexOf(tier); }
+        		function hasRankChanged(newTier) { return previousRankTier && getTierIndex(newTier) !== getTierIndex(previousRankTier); }
+        
+        		function animateShieldOutForRankUp(hasLeaderboard) {
+        			const rightContent = document.querySelector('.right-content');
+        			const shieldImg = document.getElementById('shield-image');
+        			rightContent.classList.add('center-rr');
+        			if (hasLeaderboard) {
+        				shieldImg.style.opacity = '0';
+        				setTimeout(() => {
+        					shieldImg.style.display = 'none';
+        					shieldImg.style.opacity = '';
+        				}, 400);
+        			}
+        		}
+        
+        		function showLeaderboardBadge(rankNumber, shieldCount) {
+        			if (suppressShieldUpdates) return;
+        			const shieldContainer = document.querySelector('.shield-container');
+        			const rightContent = document.querySelector('.right-content');
+        			const shieldImg = document.getElementById('shield-image');
+        
+        			rightContent.classList.add('rank-rating-expanded');
+        			rightContent.classList.remove('center-rr');
+        			shieldContainer.classList.remove('shield-hidden');
+        			shieldContainer.classList.remove('shield-fade-out');
+        			shieldContainer.style.opacity = '1';
+        
+        			const rankRatingEl = document.getElementById('rank-rating');
+        			const currentRankTier = rankRatingEl?.dataset?.tierName || '';
+        			const hideShieldIcon = currentRankTier === 'Radiant' || currentRankTier === 'Immortal 2' || currentRankTier === 'Immortal 3';
+        
+        			if (hideShieldIcon) {
+        				animateShieldIconVisibility(false);
+        			} else {
+        				shieldImg.src = shieldImageUrls[shieldCount] || shieldImageUrls[0];
+        				animateShieldIconVisibility(true);
+        			}
+        
+        			const currentMode = getRowMode();
+        			const newText = `#${rankNumber}`;
+        			if (currentMode !== 'leaderboard') {
+        				crossfadeShieldText(newText);
+        				setRowMode('leaderboard');
+        			} else {
+        				setShieldTextInstant(newText);
+        			}
+        		}
+        
+        		function showShieldsOrHide(rankTier, shieldCount) {
+        			updateShieldVisibility(rankTier, shieldCount);
+        		}
+        
+        		async function checkRank() {
+        			try {
+        				const useMockData = document.getElementById("use-mock-data")?.checked || false;
+        				let data;
+        				if (useMockData) {
+        					const response = await fetch('https://jstdave.my/valrank/testapi/mock-data.json');
+        					if (!response.ok) throw new Error(`Failed to load mock-data.json: ${response.status}`);
+        					data = await response.json();
+        				} else {
+        					const configOk = API_KEY && API_KEY !== "YOUR_API_KEY" &&
+        									 USERNAME && USERNAME !== "YOUR_USERNAME" &&
+        									 TAG && TAG !== "YOUR_TAG" &&
+        									 REGION && REGION !== "YOUR_REGION" &&
+        									 PLATFORM && PLATFORM !== "YOUR_PLATFORM";
+        					if (!configOk) {
+        						showSetupOverlay();
+        						throw new Error("Missing configuration. Open setup to continue.");
+        					}
+        					const url = `https://api.henrikdev.xyz/valorant/v3/mmr/${REGION}/${PLATFORM}/${encodeURIComponent(USERNAME)}/${encodeURIComponent(TAG)}?api_key=${encodeURIComponent(API_KEY)}`;
+        					const response = await fetch(url);
+        					if (!response.ok) {
+        						if (response.status === 401 || response.status === 403) showSetupOverlay();
+        						throw new Error(`API request failed with status ${response.status}`);
+        					}
+        					data = await response.json();
+        				}
+        
+        				const currentData = data.data.current;
+        				const shieldCount = currentData.rank_protection_shields || 0;
+        				const newRankTier = currentData.tier.name;
+        				const newRankTierShort = currentData.tier.id;
+        				const newRankRatingRaw = currentData.rr;
+        				const leaderboardPlacement = currentData.leaderboard_placement;
+        				const hasLeaderboard = leaderboardPlacement && typeof leaderboardPlacement.rank === 'number';
+        				const newLeaderboardRank = hasLeaderboard ? leaderboardPlacement.rank : null;
+        				const newImageSrc = `https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/${newRankTierShort}/largeicon.png`;
+        
+        				const rankRatingEl = document.getElementById('rank-rating');
+        				const shieldTextEl = document.getElementById('shield-count');
+        
+        				const isImmortal = newRankTier.startsWith('Immortal');
+        				const isRadiant = newRankTier === 'Radiant';
+        				const newRankRating = Math.max(0, newRankRatingRaw || 0);
+        
+        				rankRatingEl.dataset.tierName = newRankTier;
+        
+        				if (previousRankTier === null || previousRankRating === null || previousHadLeaderboard === null) {
+        					document.getElementById('rank-rating').textContent = `${newRankRating} RR`;
+        					document.getElementById('rank-rating').dataset.tierName = newRankTier;
+        					document.getElementById('rank-image').src = newImageSrc;
+        					if (hasLeaderboard) {
+        						showLeaderboardBadge(newLeaderboardRank, shieldCount);
+        					} else {
+        						updateShieldVisibility(newRankTier, shieldCount, false);
+        					}
+        					previousRankRating = newRankRating;
+        					previousRankTier = newRankTier;
+        					previousLeaderboardRank = newLeaderboardRank;
+        					previousHadLeaderboard = !!hasLeaderboard;
+        					return;
+        				}
+        
+        				if (hasRankChanged(newRankTier)) {
+        					changeRankImage(newImageSrc);
+        					const tierWentUp = getTierIndex(newRankTier) > getTierIndex(previousRankTier);
+        
+        					if (tierWentUp) {
+        						withShieldSuppressed(1600, () => {
+        							if (hasLeaderboard) {
+        								showLeaderboardBadge(newLeaderboardRank, shieldCount);
+        							} else {
+        								updateShieldVisibility(newRankTier, shieldCount, true);
+        							}
+        						});
+        
+        						if (hasLeaderboard) {
+        							animateShieldOutForRankUp(true);
+        						}
+        
+        						rankRatingEl.style.color = 'green';
+        
+        						const prevTier = previousRankTier || '';
+        						const newTier  = newRankTier || '';
+        						const isPrevImm3 = prevTier === 'Immortal 3';
+        						const enteringImmortal = !prevTier.startsWith('Immortal') && newTier.startsWith('Immortal');
+        						const enteringRadiant  = newTier === 'Radiant';
+        
+        						if (isPrevImm3 && enteringRadiant) {
+        							animateRankChange(previousRankRating, newRankRating, 1200, (v) => {
+        								rankRatingEl.textContent = `${v} RR`;
+        							}, () => { rankRatingEl.style.color = 'white'; });
+        						} else if (enteringImmortal || enteringRadiant) {
+        							animateRankChange(previousRankRating, 99, 700, (v) => {
+        								rankRatingEl.textContent = `${v} RR`;
+        							}, () => {
+        								animateRankChange(0, newRankRating, 900, (v2) => {
+        									rankRatingEl.textContent = `${v2} RR`;
+        								}, () => { rankRatingEl.style.color = 'white'; });
+        							});
+        						} else if (newTier.startsWith('Immortal') || newTier === 'Radiant') {
+        							animateRankChange(previousRankRating, newRankRating, 1200, (v) => {
+        								rankRatingEl.textContent = `${v} RR`;
+        							}, () => { rankRatingEl.style.color = 'white'; });
+        						} else {
+        							animateRankChange(previousRankRating, 99, 800, (v) => {
+        								rankRatingEl.textContent = `${v} RR`;
+        							}, () => {
+        								animateRankChange(0, newRankRating, 800, (v2) => {
+        									rankRatingEl.textContent = `${v2} RR`;
+        								}, () => { rankRatingEl.style.color = 'white'; });
+        							});
+        						}
+        					} else {
+        						const isToFirstRank = isFirstRankOfTier(newRankTier);
+        						withShieldSuppressed(1200, () => {
+        							if (hasLeaderboard) {
+        								showLeaderboardBadge(newLeaderboardRank, shieldCount);
+        							} else if (isToFirstRank) {
+        								updateShieldVisibility(newRankTier, shieldCount, true);
+        							} else {
+        								updateShieldVisibility(newRankTier, shieldCount, true);
+        							}
+        						});
+        
+        						rankRatingEl.style.color = 'red';
+        
+        						let endRR = newRankRating;
+        						if (isImmortal || isRadiant) {
+        							animateRankChange(previousRankRating, endRR, 1200, (v) => {
+        								rankRatingEl.textContent = `${v} RR`;
+        							}, () => { rankRatingEl.style.color = 'white'; });
+        						} else {
+        							animateRankChange(previousRankRating, 0, 800, (v) => {
+        								rankRatingEl.textContent = `${v} RR`;
+        							}, () => {
+        								animateRankChange(99, endRR, 800, (v2) => {
+        									rankRatingEl.textContent = `${v2} RR`;
+        								}, () => { rankRatingEl.style.color = 'white'; });
+        							});
+        						}
+        					}
+        				} else {
+        					if (newRankRating > previousRankRating) rankRatingEl.style.color = 'green';
+        					else if (newRankRating < previousRankRating) rankRatingEl.style.color = 'red';
+        					animateRankChange(previousRankRating, newRankRating, 1000, (value) => {
+        						rankRatingEl.textContent = `${value} RR`;
+        					}, () => { rankRatingEl.style.color = 'white'; });
+        				}
+        
+        				if (hasLeaderboard) {
+        					const goingUpInLeaderboard = previousLeaderboardRank !== null && newLeaderboardRank < previousLeaderboardRank;
+        					const goingDownInLeaderboard = previousLeaderboardRank !== null && newLeaderboardRank > previousLeaderboardRank;
+        					if (goingUpInLeaderboard) shieldTextEl.style.color = 'green';
+        					else if (goingDownInLeaderboard) shieldTextEl.style.color = 'red';
+        
+        					const shieldContainer = document.querySelector('.shield-container');
+        					const rightContent = document.querySelector('.right-content');
+        					const shieldImg = document.getElementById('shield-image');
+        					rightContent.classList.add('rank-rating-expanded');
+        					rightContent.classList.remove('center-rr');
+        					shieldContainer.classList.remove('shield-hidden');
+        					shieldContainer.classList.remove('shield-fade-out');
+        
+        					const currentRankTier = newRankTier;
+        					const hideShieldIcon = currentRankTier === 'Radiant' || currentRankTier === 'Immortal 2' || currentRankTier === 'Immortal 3';
+        					if (hideShieldIcon) {
+        						animateShieldIconVisibility(false);
+        					} else {
+        						shieldImg.src = shieldImageUrls[shieldCount] || shieldImageUrls[0];
+        						animateShieldIconVisibility(true);
+        					}
+        
+        					if (!previousHadLeaderboard) {
+        						showLeaderboardBadge(newLeaderboardRank, shieldCount);
+        						shieldTextEl.style.color = 'white';
+        					} else {
+        						showLeaderboardBadge(previousLeaderboardRank ?? newLeaderboardRank, shieldCount);
+        						animateLeaderboardChange(previousLeaderboardRank ?? newLeaderboardRank, newLeaderboardRank, 1000, (value) => {
+        							shieldTextEl.textContent = `#${value}`;
+        						}, () => { shieldTextEl.style.color = 'white'; });
+        					}
+        				} else {
+        					if (getRowMode() === 'shields' && shieldCount !== previousShieldCount) {
+        						const label = shieldCount === 1 ? 'Shield' : 'Shields';
+        						const shieldsText = `${shieldCount} ${label}`;
+        						crossfadeShieldText(shieldsText);
+        						const newIconSrc = shieldImageUrls[shieldCount] || shieldImageUrls[0];
+        						crossfadeShieldIcon(newIconSrc);
+        					} else {
+        						showShieldsOrHide(newRankTier, shieldCount);
+        					}
+        				}
+        
+        
+        				previousRankRating = newRankRating;
+        				previousRankTier = newRankTier;
+        				previousHadLeaderboard = !!hasLeaderboard;
+        				previousLeaderboardRank = newLeaderboardRank;
+        				previousShieldCount = shieldCount;
+        
+        			} catch (error) {
+        				console.error('Error fetching rank data:', error);
+        			}
+        		}
+        
+        		(function bootstrap() {
+        			const chosen = initSettings();
+        			wireSetupUI();
+        			const needSetup = !settingsComplete({ apiKey: API_KEY, username: USERNAME, tag: TAG, region: REGION, platform: PLATFORM });
+        			if (needSetup) { showSetupOverlay(chosen); }
+        			const mockDataToggle = document.getElementById("use-mock-data");
+        			if (mockDataToggle) {
+        				mockDataToggle.addEventListener("change", () => {
+        					previousRankTier = null;
+        					previousRankRating = null;
+        					previousLeaderboardRank = null;
+        					previousHadLeaderboard = null;
+        					checkRank();
+        				});
+        			}
+        			setInterval(checkRank, 10000);
+        			checkRank();
+        		})();
     </script>
+
 </body>
 
 </html>
