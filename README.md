@@ -43,7 +43,7 @@ The setup wizard will ask for:
 - **Platform** – Select your platform (PC or Console).  
 - **Background Image URL (Optional)** – Paste a direct link to a custom background image. Leave blank to use the default background.
 
-![First-Time Setup](https://i.imgur.com/9Tam5tp.png)
+![First-Time Setup](https://i.imgur.com/y5rthRu.png)
 
 ---
 
