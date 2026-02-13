@@ -43,7 +43,8 @@ The setup wizard will ask for:
 - **Platform** – Select your platform (PC or Console).  
 - **Background Image URL (Optional)** – Paste a direct link to a custom background image. Leave blank to use the default background.
 
-![First-Time Setup](https://i.imgur.com/y5rthRu.png)
+<img width="2559" height="1439" alt="image" src="https://github.com/user-attachments/assets/5ef26d41-ced8-4ade-9093-df8aa77e8af0" />
+
 
 ---
 
@@ -59,7 +60,7 @@ The setup wizard will ask for:
 2. In your scene, add a new source by clicking the **+** button under **Sources**.  
 3. Select **Browser** from the menu.  
 
-![OBS Browser Source Creation](https://i.imgur.com/Pjtv7vt.png)
+<img width="486" height="485" alt="image" src="https://github.com/user-attachments/assets/4eb29287-5c89-48bb-88ff-fea190c19522" />
 
 ---
 
@@ -70,7 +71,7 @@ The setup wizard will ask for:
    - **Height:** 500px  
 3. Click **OK**.
 
-![Pasting URL into OBS](https://i.imgur.com/Qw8a1gf.png)
+<img width="736" height="626" alt="image" src="https://github.com/user-attachments/assets/e627fdb1-b873-4862-89f1-a4dfabcec0d1" />
 
 ---
 
@@ -134,7 +135,7 @@ The widget is now live in your OBS scene! It will:
 ---
 
 ## Example Pictures & Rankup Animation
-<img src="https://i.imgur.com/n0BbsI2.png" height="300"> <img src="https://i.imgur.com/rxL5SU5.png" height="300"> ![Example-Video](https://github.com/user-attachments/assets/a77ed1aa-f2f6-4eb6-b6ce-52e0f2be987f)
+<img width="1249" height="743" alt="image" src="https://github.com/user-attachments/assets/4c09bf4f-9fcd-4a97-86ac-a4f8da3bb988" /> <img width="1215" height="767" alt="image" src="https://github.com/user-attachments/assets/152a77cc-c166-43d4-bfb0-89287a06262e" /> ![Example-Video](https://github.com/user-attachments/assets/a77ed1aa-f2f6-4eb6-b6ce-52e0f2be987f)
 
 ## Example Picture of an Account with Leaderboard Placement (Top 15000)
-<img src="https://i.imgur.com/uLpKBYg.png" height="300">
+<img width="1194" height="679" alt="image" src="https://github.com/user-attachments/assets/a6ad67b2-4db8-4663-b10d-2e641071b6a9" />
