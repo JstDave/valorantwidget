@@ -1,3 +1,9 @@
+# ℹ️ Important Information
+
+This widget was solely made by me (JstDave). It would be nice if you could give me a follow or subscription on my Twitch channel at [https://twitch.tv/jstdave](https://twitch.tv/jstdave) if you like the widget! 
+
+If you need help or want to ask me something about the widget, please join the [Discord](https://dc.jstdave.com) or contact me on one of my [socials](https://jstdave.com/socials)! 
+
 # Valorant Rank Widget  
 
 This project is a **Valorant Rank Widget** that dynamically displays your current rank, rank rating (RR), and rank image. It includes animations for rank changes, such as fading in and out of the rank image and counting up or down the rank rating.
@@ -21,7 +27,7 @@ The widget is customizable and designed for use in streaming software like OBS.
 
 ### 1. **Download Overlay.html**  
 1. Click the green **Code** button at the top of the repository.  
-2. Select **Download ZIP** and extract the contents to a folder on your computer.  
+2. Select **Download ZIP** and extract the contents to a folder on your computer. (Right click -> Extract all -> Select your folder)  
 3. Locate and open `Overlay.html`.
 
 ---
